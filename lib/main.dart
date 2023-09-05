@@ -7,40 +7,33 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'ToDo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(210, 2, 26, 37)),
+        // This is the theme of the application.
+
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'ToDo - get it done!'),
     );
+  }
+}
+
+class MyAppState extends ChangeNotifier {
+  void toggleChore() {
+    // adds, changes look and removes chores from the list
+    // TODO
   }
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-  // This widget is the home page of your application. It is stateful, meaning
+  // This widget is the home page of the application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
 
@@ -56,71 +49,123 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  var selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+    Widget
+        page; // this widget switches between views when navigation rail is used
+    switch (selectedIndex) {
+      case 0:
+        //page = Placeholder(); // just a X right now
+        page = ListPage();
+        break;
+      case 1:
+        page = Placeholder(); // just a X right now
+        break;
+      default:
+        throw UnimplementedError('no widget for $selectedIndex');
+    }
+
+    return LayoutBuilder(builder: (context, constraints) {
+      // decides when to extend rail with text labels for the navigation icons
+      return Scaffold(
+        appBar: AppBar(
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            // Here we take the value from the MyHomePage object that was created by
+            // the App.build method, and use it to set our appbar title.
+            title: Text(widget.title),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.filter_alt),
+                tooltip: 'Filter',
+                onPressed: () {
+                  // nothing happens here yet
+                },
+              )
+            ]),
+        body: Row(
+          children: [
+            SafeArea(
+              // Secures that other things don`t overlap this area
+              child: NavigationRail(
+                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                extended: constraints.maxWidth >= 600,
+                destinations: [
+                  NavigationRailDestination(
+                    icon: Icon(Icons.home),
+                    label: Text('Home'),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.add),
+                    label: Text('New List'),
+                  ),
+                  // Put more destinations/icons here (must be at least two!)
+                ],
+                selectedIndex: selectedIndex,
+                onDestinationSelected: (value) {
+                  setState(() {
+                    selectedIndex = value;
+                  });
+                },
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Expanded(
+              child: Container(
+                color: Theme.of(context).colorScheme.onPrimary,
+                child:
+                    page, // switches between different pages according to the widget 'page'
+              ),
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {}, // does nothing right now
+          tooltip: 'Add chore',
+          child: const Icon(Icons.add),
+        ),
+      );
+    });
+  }
+}
+
+class ListPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    //var appState = context.watch<MyAppState>();
+
+    IconData iconData = Icons.check_box_outline_blank_outlined;
+/*
+    void toggleBox() {
+      setState(() {
+        if (iconData == Icons.check_box_outline_blank_outlined) {
+          iconData = Icons.check_box;
+        } else {
+          iconData = Icons.check_box_outline_blank_outlined;
+        }
+      });
+    }
+*/
+    return Column(
+      children: [
+        Row(
+          children: [
+            IconButton(
+              icon: Icon(iconData),
+              tooltip: 'Mark as done',
+              onPressed: () {
+                //toggleBox();
+              }, // Does nothing right now
+            ),
+            Text('Clean bathroom'),
+            IconButton(
+              icon: Icon(Icons.delete),
+              tooltip: 'Delete',
+              onPressed: () {},
+            )
+          ],
+        )
+      ],
     );
   }
 }
