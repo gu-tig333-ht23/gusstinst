@@ -14,9 +14,14 @@ class MyApp extends StatelessWidget {
       title: 'ToDo',
       theme: ThemeData(
         // This is the theme of the application.
-
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
         useMaterial3: true,
+
+        // Theme for the App Bar
+        appBarTheme: AppBarTheme(
+          titleTextStyle: TextStyle(
+              fontFamily: 'Times New Roman', fontSize: 22, color: Colors.black),
+        ),
       ),
       home: const MyHomePage(title: 'ToDo - get it done!'),
     );
@@ -111,10 +116,15 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             Expanded(
-              child: Container(
-                color: Theme.of(context).colorScheme.onPrimary,
-                child:
-                    page, // switches between different pages according to the widget 'page'
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(bottom: 70), // in order to be able
+                // to delete the last chore in the list
+                child: Container(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  child:
+                      page, // switches between different pages according to the widget 'page'
+                ),
               ),
             ),
           ],
@@ -134,7 +144,6 @@ class ListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     //var appState = context.watch<MyAppState>();
 
-    IconData iconData = Icons.check_box_outline_blank_outlined;
 /*
     void toggleBox() {
       setState(() {
@@ -146,26 +155,80 @@ class ListPage extends StatelessWidget {
       });
     }
 */
-    return Column(
+    return ListView(
       children: [
-        Row(
-          children: [
-            IconButton(
-              icon: Icon(iconData),
-              tooltip: 'Mark as done',
-              onPressed: () {
-                //toggleBox();
-              }, // Does nothing right now
-            ),
-            Text('Clean bathroom'),
-            IconButton(
-              icon: Icon(Icons.delete),
-              tooltip: 'Delete',
-              onPressed: () {},
-            )
-          ],
-        )
+        _chore('Clean bathroom'),
+        _chore('Fix the computer'),
+        _chore('Do homework'),
+        _chore('Vacuum bedroom'),
+        _chore('Walk the dog'),
+        _chore('Workout'),
+        _chore('Grocery shopping'),
+        _chore('Make the bed'),
+        _chore('Make dinner'),
+        _chore('Buy more wine'),
+        _chore('Wash the car'),
+        _chore('Help grandma'),
+        _chore('Laundry'),
       ],
     );
   }
 }
+
+Widget _chore(String text) {
+  return Column(
+    children: [
+      Padding(
+        padding: EdgeInsets.all(3),
+        child: Row(
+          children: [
+            IconButton(
+                icon: Icon(Icons.check_box_outline_blank_outlined),
+                tooltip: 'Mark as done',
+                onPressed: () {}
+                //toggleBox();, // Does nothing right now
+                ),
+            Text(text,
+                style: TextStyle(fontSize: 18, fontFamily: 'Times New Roman')),
+            Spacer(),
+            IconButton(
+              icon: Icon(Icons.delete),
+              tooltip: 'Delete',
+              onPressed: () {}, // does nothing right now
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+}
+
+/*
+class Chore extends StatelessWidget {
+  Chore(this.text, this.deadline);
+
+  
+}
+
+class ChoreCard extends StatelessWidget {
+  final String text;
+  final DateTime deadline;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme.displayMedium!.copyWith(
+      color: theme.colorScheme.onPrimary,
+    );
+
+    return Card(
+      color: theme.colorScheme.primary,
+      elevation: 10,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Text(text),
+      ),
+    );
+  }
+}
+*/
