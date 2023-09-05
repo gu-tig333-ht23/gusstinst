@@ -89,48 +89,60 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               )
             ]),
-        body: Row(
-          children: [
-            SafeArea(
-              // Secures that other things don`t overlap this area
-              child: NavigationRail(
-                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-                extended: constraints.maxWidth >= 600,
-                destinations: [
-                  NavigationRailDestination(
-                    icon: Icon(Icons.home),
-                    label: Text('Home'),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.add),
-                    label: Text('New List'),
-                  ),
-                  // Put more destinations/icons here (must be at least two!)
-                ],
-                selectedIndex: selectedIndex,
-                onDestinationSelected: (value) {
-                  setState(() {
-                    selectedIndex = value;
-                  });
-                },
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(bottom: 70), // in order to be able
-                // to delete the last chore in the list
-                child: Container(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  child:
-                      page, // switches between different pages according to the widget 'page'
+        body: Container(
+          color: Theme.of(context).colorScheme.inversePrimary,
+          child: Row(
+            children: [
+              SafeArea(
+                // Secures that other things don`t overlap this area
+                child: NavigationRail(
+                  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                  extended: constraints.maxWidth >= 600,
+                  destinations: [
+                    NavigationRailDestination(
+                      icon: Icon(Icons.home),
+                      label: Text('Home'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.help),
+                      label: Text('Help'),
+                    ),
+                    // Put more destinations/icons here (must be at least two!)
+                  ],
+                  selectedIndex: selectedIndex,
+                  onDestinationSelected: (value) {
+                    setState(() {
+                      selectedIndex = value;
+                    });
+                  },
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 70, right: 10), // in order to be able
+                  // to delete the last chore in the list
+
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    child:
+                        page, // switches between different pages according to the widget 'page'
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {}, // does nothing right now
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const Placeholder(),
+              ),
+            );
+          }, // does nothing right now
           tooltip: 'Add chore',
           child: const Icon(Icons.add),
         ),
@@ -144,6 +156,22 @@ class ListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     //var appState = context.watch<MyAppState>();
 
+    List<Chore> chores = [
+      Chore('Clean bathroom'),
+      Chore('Fix the computer'),
+      Chore('Do homework'),
+      Chore('Vacuum bedroom'),
+      Chore('Walk the dog'),
+      Chore('Workout'),
+      Chore('Grocery shopping'),
+      Chore('Make the bed'),
+      Chore('Make dinner'),
+      Chore('Buy more wine'),
+      Chore('Wash the car'),
+      Chore('Help grandma'),
+      Chore('Laundry'),
+      Chore('Feed the cat')
+    ];
 /*
     void toggleBox() {
       setState(() {
@@ -156,21 +184,7 @@ class ListPage extends StatelessWidget {
     }
 */
     return ListView(
-      children: [
-        _chore('Clean bathroom'),
-        _chore('Fix the computer'),
-        _chore('Do homework'),
-        _chore('Vacuum bedroom'),
-        _chore('Walk the dog'),
-        _chore('Workout'),
-        _chore('Grocery shopping'),
-        _chore('Make the bed'),
-        _chore('Make dinner'),
-        _chore('Buy more wine'),
-        _chore('Wash the car'),
-        _chore('Help grandma'),
-        _chore('Laundry'),
-      ],
+      children: chores.map((chore) => _chore(chore.text)).toList(),
     );
   }
 }
@@ -188,8 +202,10 @@ Widget _chore(String text) {
                 onPressed: () {}
                 //toggleBox();, // Does nothing right now
                 ),
-            Text(text,
-                style: TextStyle(fontSize: 18, fontFamily: 'Times New Roman')),
+            TextButton(
+                child: Text(text),
+                onPressed: () {}), // does nothing right now, will be able to
+            // edit the text later when clicked
             Spacer(),
             IconButton(
               icon: Icon(Icons.delete),
@@ -203,32 +219,10 @@ Widget _chore(String text) {
   );
 }
 
-/*
-class Chore extends StatelessWidget {
-  Chore(this.text, this.deadline);
-
-  
-}
-
-class ChoreCard extends StatelessWidget {
+class Chore {
   final String text;
-  final DateTime deadline;
 
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final style = theme.textTheme.displayMedium!.copyWith(
-      color: theme.colorScheme.onPrimary,
-    );
+  // add deadline date?
 
-    return Card(
-      color: theme.colorScheme.primary,
-      elevation: 10,
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Text(text),
-      ),
-    );
-  }
+  Chore(this.text);
 }
-*/
