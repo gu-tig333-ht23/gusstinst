@@ -6,8 +6,6 @@ import 'chore_item.dart';
 class ListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //var appState = context.watch<MyAppState>();
-
     List<Chore> chores = [
       Chore('Clean bathroom'),
       Chore('Fix the computer'),
@@ -32,11 +30,5 @@ class ListPage extends StatelessWidget {
       },
       itemCount: chores.length,
     );
-
-    /*
-    return ListView(
-      children: chores.map((chore) => _chore(chore.text)).toList(),
-    );
-    */
   }
 }
