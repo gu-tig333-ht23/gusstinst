@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
         page = HelpPage();
         break;
       case 2: // add chore icon
-        page = HelpPage(); // for now
+        page = AddPage();
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }
@@ -194,6 +194,34 @@ class HelpPage extends StatelessWidget {
       children: [
         Text('How does it work?'),
       ],
+    );
+  }
+}
+
+// View for adding new
+class AddPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.all(10),
+                labelText: 'What are you going to do?',
+              ),
+            ),
+          ),
+          FloatingActionButton.extended(
+            icon: Icon(Icons.add),
+            label: Text('ADD'),
+            onPressed: () {}, // does nothing rn
+          ),
+        ],
+      ),
     );
   }
 }
