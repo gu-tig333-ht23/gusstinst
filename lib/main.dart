@@ -3,6 +3,9 @@ import 'add_page.dart';
 import 'help_page.dart';
 import 'list_page.dart';
 
+// For the popupButton, filtering chores
+enum FilterItem { all, done, undone }
+
 void main() {
   runApp(const MyApp());
 }
@@ -67,11 +70,30 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: Text(widget.title),
           actions: [
-            IconButton(
-              // Filter button
-              icon: Icon(Icons.filter_alt),
-              tooltip: 'Filter',
-              onPressed: () {},
+            Padding(
+              padding: const EdgeInsets.only(right: 15),
+              child: PopupMenuButton<FilterItem>(
+                icon: Icon(Icons.filter_alt),
+                initialValue: FilterItem.all, //default
+                onSelected: (FilterItem item) {
+                  setState(() {});
+                },
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuEntry<FilterItem>>[
+                  const PopupMenuItem<FilterItem>(
+                    value: FilterItem.all,
+                    child: Text('all chores'),
+                  ),
+                  const PopupMenuItem<FilterItem>(
+                    value: FilterItem.done,
+                    child: Text('done'),
+                  ),
+                  const PopupMenuItem<FilterItem>(
+                    value: FilterItem.undone,
+                    child: Text('undone'),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
