@@ -70,6 +70,8 @@ class _MyHomePageState extends State<MyHomePage> {
         //page = Placeholder(); // just a X right now
         page = HelpPage();
         break;
+      case 2: // add chore icon
+        page = HelpPage(); // for now
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }
@@ -105,6 +107,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       icon: Icon(Icons.help),
                       label: Text('Help'),
                     ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.add_task),
+                      label: Text('Add chore'),
+                    ),
                   ],
                   selectedIndex: selectedIndex,
                   onDestinationSelected: (value) {
@@ -127,18 +133,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ],
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => const Placeholder(),
-              ),
-            );
-          },
-          tooltip: 'Add chore',
-          child: const Icon(Icons.add),
         ),
       );
     });
