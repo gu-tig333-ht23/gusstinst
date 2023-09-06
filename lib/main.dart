@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'chore_item.dart';
-
 import 'chore.dart';
 
 void main() {
@@ -69,7 +67,8 @@ class _MyHomePageState extends State<MyHomePage> {
         page = ListPage();
         break;
       case 1: // help icon
-        page = Placeholder(); // just a X right now
+        //page = Placeholder(); // just a X right now
+        page = HelpPage();
         break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');
@@ -191,5 +190,16 @@ class ListPage extends StatelessWidget {
       children: chores.map((chore) => _chore(chore.text)).toList(),
     );
     */
+  }
+}
+
+class HelpPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text('How does it work?'),
+      ],
+    );
   }
 }
