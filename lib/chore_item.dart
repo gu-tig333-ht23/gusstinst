@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'chore.dart';
 
+// class for making the chore items in the list
 class ChoreItem extends StatelessWidget {
   final Chore chore;
   ChoreItem(this.chore, {super.key});

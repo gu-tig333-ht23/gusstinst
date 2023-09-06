@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'add_page.dart';
+import 'chore.dart';
 import 'help_page.dart';
 import 'list_page.dart';
 
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
       title: 'ToDo',
       theme: ThemeData(
         // This is the theme of the application.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 4, 169, 106)),
         useMaterial3: true,
 
         // Theme for the App Bar
@@ -45,6 +47,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var selectedIndex = 0;
+  List<Chore> chores = [];
+
+  void addChore(Chore chore) {
+    setState(() {
+      chores.add(chore);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,13 +61,14 @@ class _MyHomePageState extends State<MyHomePage> {
         page; // this widget switches between views when navigation rail is used
     switch (selectedIndex) {
       case 0: // home
-        page = ListPage();
+        page = ListPage(chores);
         break;
       case 1: // help
         page = HelpPage();
         break;
       case 2: // add chore
-        page = AddPage();
+        page = AddPage(addChore);
+        break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }
@@ -74,7 +84,6 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.only(right: 15),
               child: PopupMenuButton<FilterItem>(
                 icon: Icon(Icons.filter_alt),
-                initialValue: FilterItem.all, //default
                 onSelected: (FilterItem item) {
                   setState(() {});
                 },

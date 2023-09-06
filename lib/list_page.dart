@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'chore.dart';
 import 'chore_item.dart';
 
-// view to show chores
+// view to receive and show chores
 class ListPage extends StatelessWidget {
+  final List<Chore> chores;
+
+  ListPage(this.chores);
+
   @override
   Widget build(BuildContext context) {
+    /*
     List<Chore> chores = [
       Chore('Clean bathroom'),
       Chore('Fix the computer'),
@@ -22,7 +27,7 @@ class ListPage extends StatelessWidget {
       Chore('Laundry'),
       Chore('Feed the cat')
     ];
-
+*/
     return ListView.builder(
       itemBuilder: (context, index) {
         //return _chore(context, chores[index % chores.length]);
