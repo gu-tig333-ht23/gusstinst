@@ -61,11 +61,10 @@ class _MyHomePageState extends State<MyHomePage> {
     Widget
         page; // this widget switches between views when navigation rail is used
     switch (selectedIndex) {
-      case 0:
-        //page = Placeholder(); // just a X right now
+      case 0: // home icon
         page = ListPage();
         break;
-      case 1:
+      case 1: // help icon
         page = Placeholder(); // just a X right now
         break;
       default:
@@ -73,28 +72,24 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     return LayoutBuilder(builder: (context, constraints) {
-      // decides when to extend rail with text labels for the navigation icons
       return Scaffold(
         appBar: AppBar(
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            // Here we take the value from the MyHomePage object that was created by
-            // the App.build method, and use it to set our appbar title.
-            title: Text(widget.title),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.filter_alt),
-                tooltip: 'Filter',
-                onPressed: () {
-                  // nothing happens here yet
-                },
-              )
-            ]),
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(widget.title),
+          actions: [
+            IconButton(
+              // Filter button
+              icon: Icon(Icons.filter_alt),
+              tooltip: 'Filter',
+              onPressed: () {},
+            ),
+          ],
+        ),
         body: Container(
           color: Theme.of(context).colorScheme.inversePrimary,
           child: Row(
             children: [
               SafeArea(
-                // Secures that other things don`t overlap this area
                 child: NavigationRail(
                   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                   extended: constraints.maxWidth >= 600,
@@ -107,7 +102,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       icon: Icon(Icons.help),
                       label: Text('Help'),
                     ),
-                    // Put more destinations/icons here (must be at least two!)
                   ],
                   selectedIndex: selectedIndex,
                   onDestinationSelected: (value) {
@@ -119,15 +113,12 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                      bottom: 70, right: 10), // in order to be able
-                  // to delete the last chore in the list
-
+                  padding: const EdgeInsets.only(bottom: 70, right: 10),
                   child: Card(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    child:
-                        page, // switches between different pages according to the widget 'page'
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: page,
                   ),
                 ),
               ),
@@ -142,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 builder: (BuildContext context) => const Placeholder(),
               ),
             );
-          }, // does nothing right now
+          },
           tooltip: 'Add chore',
           child: const Icon(Icons.add),
         ),
@@ -183,13 +174,23 @@ class ListPage extends StatelessWidget {
       });
     }
 */
+    return ListView.builder(
+      itemBuilder: (context, index) {
+        //return _chore(context, chores[index % chores.length]);
+        return ChoreItem(chores[index]);
+      },
+      itemCount: chores.length,
+    );
+
+    /*
     return ListView(
       children: chores.map((chore) => _chore(chore.text)).toList(),
     );
+    */
   }
 }
 
-Widget _chore(String text) {
+Widget _chore(BuildContext context, Chore chore) {
   return Column(
     children: [
       Padding(
@@ -203,10 +204,10 @@ Widget _chore(String text) {
                 //toggleBox();, // Does nothing right now
                 ),
             TextButton(
-                child: Text(text),
+                child: Text(chore.text),
                 onPressed: () {}), // does nothing right now, will be able to
             // edit the text later when clicked
-            Spacer(),
+            Spacer(), // to push the delete button to rightmost end of the row
             IconButton(
               icon: Icon(Icons.delete),
               tooltip: 'Delete',
@@ -217,6 +218,42 @@ Widget _chore(String text) {
       ),
     ],
   );
+}
+
+class ChoreItem extends StatelessWidget {
+  final Chore chore;
+  ChoreItem(this.chore, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.all(3),
+          child: Row(
+            children: [
+              IconButton(
+                  icon: Icon(Icons.check_box_outline_blank_outlined),
+                  tooltip: 'Mark as done',
+                  onPressed: () {}
+                  //toggleBox();, // Does nothing right now
+                  ),
+              TextButton(
+                  child: Text(chore.text),
+                  onPressed: () {}), // does nothing right now, will be able to
+              // edit the text later when clicked
+              Spacer(), // to push the delete button to rightmost end of the row
+              IconButton(
+                icon: Icon(Icons.delete),
+                tooltip: 'Delete',
+                onPressed: () {}, // does nothing right now
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class Chore {
