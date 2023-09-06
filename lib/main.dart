@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'chore_item.dart';
-import 'chore.dart';
+import 'add_page.dart';
+import 'help_page.dart';
+import 'list_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,13 +28,6 @@ class MyApp extends StatelessWidget {
       ),
       home: const MyHomePage(title: 'ToDo - get it done!'),
     );
-  }
-}
-
-class MyAppState extends ChangeNotifier {
-  void toggleChore() {
-    // adds, changes look and removes chores from the list
-    // TODO
   }
 }
 
@@ -67,7 +61,6 @@ class _MyHomePageState extends State<MyHomePage> {
         page = ListPage();
         break;
       case 1: // help icon
-        //page = Placeholder(); // just a X right now
         page = HelpPage();
         break;
       case 2: // add chore icon
@@ -136,92 +129,5 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       );
     });
-  }
-}
-
-class ListPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    //var appState = context.watch<MyAppState>();
-
-    List<Chore> chores = [
-      Chore('Clean bathroom'),
-      Chore('Fix the computer'),
-      Chore('Do homework'),
-      Chore('Vacuum bedroom'),
-      Chore('Walk the dog'),
-      Chore('Workout'),
-      Chore('Grocery shopping'),
-      Chore('Make the bed'),
-      Chore('Make dinner'),
-      Chore('Buy more wine'),
-      Chore('Wash the car'),
-      Chore('Help grandma'),
-      Chore('Laundry'),
-      Chore('Feed the cat')
-    ];
-/*
-    void toggleBox() {
-      setState(() {
-        if (iconData == Icons.check_box_outline_blank_outlined) {
-          iconData = Icons.check_box;
-        } else {
-          iconData = Icons.check_box_outline_blank_outlined;
-        }
-      });
-    }
-*/
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        //return _chore(context, chores[index % chores.length]);
-        return ChoreItem(chores[index]);
-      },
-      itemCount: chores.length,
-    );
-
-    /*
-    return ListView(
-      children: chores.map((chore) => _chore(chore.text)).toList(),
-    );
-    */
-  }
-}
-
-class HelpPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text('How does it work?'),
-      ],
-    );
-  }
-}
-
-// View for adding new
-class AddPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.all(10),
-                labelText: 'What are you going to do?',
-              ),
-            ),
-          ),
-          FloatingActionButton.extended(
-            icon: Icon(Icons.add),
-            label: Text('ADD'),
-            onPressed: () {}, // does nothing rn
-          ),
-        ],
-      ),
-    );
   }
 }
