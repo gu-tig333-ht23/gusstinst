@@ -30,10 +30,9 @@ class AddPage extends StatelessWidget {
           onPressed: () {
             // Gets the entered chore text from the input field
             String choreText = _controller.text;
-            print(choreText);
             // Creates a new chore object
             Chore newChore = Chore(choreText);
-            // Adds chore to the list
+            // Adds chore to the chores list
             addChore(newChore);
             // Clears the input field
             _controller.clear();

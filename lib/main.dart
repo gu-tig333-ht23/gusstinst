@@ -49,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var selectedIndex = 0;
   List<Chore> chores = [];
 
+  // function/method that adds new chores
   void addChore(Chore chore) {
     setState(() {
       chores.add(chore);
