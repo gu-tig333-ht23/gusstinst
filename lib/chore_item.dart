@@ -6,9 +6,13 @@ class ChoreItem extends StatelessWidget {
   final Chore chore;
   final Function(Chore) deleteChore;
   final Function(Chore) toggleBox;
+  final Function(Chore, String) editChoreText;
 
   ChoreItem(this.chore,
-      {super.key, required this.deleteChore, required this.toggleBox});
+      {super.key,
+      required this.deleteChore,
+      required this.toggleBox,
+      required this.editChoreText});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +38,11 @@ class ChoreItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   InkWell(
-                    onTap: () {}, // will be able to edit the text later
+                    // the chore text
+                    onTap: () {
+                      //print(chore.text);
+                      editChoreText(chore, chore.text);
+                    }, // will be able to edit the text later
                     child: Text(
                       style: TextStyle(
                           decoration: chore.isDone

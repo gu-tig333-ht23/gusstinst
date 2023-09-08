@@ -1,5 +1,5 @@
 class Chore {
-  final String text;
+  String text;
 
   final String minute;
   final String hour;

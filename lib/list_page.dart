@@ -12,7 +12,12 @@ class ListPage extends StatelessWidget {
   // handles the toggleBox function
   final Function(Chore) toggleBox;
 
-  ListPage(this.chores, {required this.deleteChore, required this.toggleBox});
+  final Function(Chore, String) editChoreText;
+
+  ListPage(this.chores,
+      {required this.deleteChore,
+      required this.toggleBox,
+      required this.editChoreText});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +35,8 @@ class ListPage extends StatelessWidget {
                   chores[choreIndex],
                   deleteChore: deleteChore,
                   toggleBox: toggleBox,
-                )
+                  editChoreText: editChoreText,
+                ),
               ],
             );
           }

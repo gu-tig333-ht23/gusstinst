@@ -70,13 +70,54 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  // function for editing the chore text in existing chores
+  void editChoreText(Chore chore, String newtxt) {
+    TextEditingController textEditController =
+        TextEditingController(text: chore.text); //showing current text
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Edit chore text'),
+          content: TextField(
+            controller: textEditController,
+            decoration: InputDecoration(labelText: 'Chore Text'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Save'),
+              onPressed: () {
+                String newText = textEditController.text;
+                print(newText); // control
+                setState(() {
+                  chore.text = newText;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget
         page; // this widget switches between views when navigation rail is used
     switch (selectedIndex) {
       case 0: // home
-        page = ListPage(chores, deleteChore: deleteChore, toggleBox: toggleBox);
+        page = ListPage(chores,
+            deleteChore: deleteChore,
+            toggleBox: toggleBox,
+            editChoreText: editChoreText);
         break;
       case 1: // help
         page = HelpPage();
