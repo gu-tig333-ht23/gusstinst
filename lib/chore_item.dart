@@ -45,10 +45,15 @@ class ChoreItem extends StatelessWidget {
                     ),
                   ),
                   InkWell(
-                    onTap: () {},
-                    child: Text(
-                        '${chore.year}/${chore.month}/${chore.day}    ${chore.hour}:${chore.minute}'),
-                    // does nothing rn, edit the date later when clicked
+                    onTap:
+                        () {}, // does nothing rn, edit the date later when clicked
+                    child: Text(chore.year.isEmpty &&
+                            chore.month.isEmpty &&
+                            chore.day.isEmpty &&
+                            chore.hour.isEmpty &&
+                            chore.minute.isEmpty
+                        ? 'No deadline'
+                        : '${chore.year}/${chore.month}/${chore.day}    ${chore.hour}:${chore.minute}'),
                   ),
                 ],
               ),

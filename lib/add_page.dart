@@ -30,52 +30,79 @@ class AddPage extends StatelessWidget {
             ),
           ),
         ),
-        Text('Any deadline?'),
-        Text('Please use format 2023/5/2  23:59'),
-        TextField(
-          controller: _yearController,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            contentPadding: EdgeInsets.only(right: 10, left: 10),
-            labelText: 'Year',
-          ),
-        ),
-        TextField(
-          controller: _monthController,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            contentPadding: EdgeInsets.only(right: 10, left: 10),
-            labelText: 'Month',
-          ),
-        ),
-        TextField(
-          controller: _dayController,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            contentPadding: EdgeInsets.only(right: 10, left: 10),
-            labelText: 'Day',
-          ),
-        ),
+        Text('Any deadline? (optional)'),
+
+        // Year, month and day input fields in a row
         Padding(
-          padding: const EdgeInsets.all(10),
-          child: TextField(
-            controller: _hourController,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              contentPadding: EdgeInsets.only(right: 10, left: 10),
-              labelText: 'Hour',
-            ),
+          padding: const EdgeInsets.only(right: 10, left: 10),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _yearController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.only(right: 10, left: 10),
+                    labelText: 'Year',
+                  ),
+                ),
+              ),
+              SizedBox(width: 5), // add some space between input fields
+              Expanded(
+                child: TextField(
+                  controller: _monthController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.only(right: 10, left: 10),
+                    labelText: 'Month',
+                  ),
+                ),
+              ),
+              SizedBox(width: 5), // add some space between input fields
+              Expanded(
+                child: TextField(
+                  controller: _dayController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.only(right: 10, left: 10),
+                    labelText: 'Day',
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
+        Text('Please use format 20YY/MM/DD  HH:MM'),
+
+        // Hour and minute input fields in a row
         Padding(
-          padding: const EdgeInsets.all(10),
-          child: TextField(
-            controller: _minuteController,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              contentPadding: EdgeInsets.only(right: 10, left: 10),
-              labelText: 'Minute',
-            ),
+          padding:
+              const EdgeInsets.only(right: 10, left: 10, bottom: 10, top: 3),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _hourController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.only(right: 10, left: 10),
+                    labelText: 'Hour',
+                  ),
+                ),
+              ),
+              SizedBox(width: 5),
+              Expanded(
+                child: TextField(
+                  controller: _minuteController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.only(right: 10, left: 10),
+                    labelText: 'Minute',
+                  ),
+                ),
+              ),
+              SizedBox(width: 100), // pushing the input fields to leftmost side
+            ],
           ),
         ),
         FloatingActionButton.extended(
