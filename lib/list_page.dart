@@ -30,10 +30,18 @@ class ListPage extends StatelessWidget {
 */
     return ListView.builder(
       itemBuilder: (context, index) {
-        //return _chore(context, chores[index % chores.length]);
-        return ChoreItem(chores[index]);
+        if (index < chores.length) {
+          return Column(
+            children: [
+              ChoreItem(chores[index]),
+              Divider(),
+            ],
+          );
+        } else {
+          return null;
+        }
       },
-      itemCount: chores.length,
+      itemCount: chores.length * 2 - 1,
     );
   }
 }
