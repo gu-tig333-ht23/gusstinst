@@ -5,8 +5,10 @@ import 'chore.dart';
 class ChoreItem extends StatelessWidget {
   final Chore chore;
   final Function(Chore) deleteChore;
+  final Function(Chore) toggleBox;
 
-  ChoreItem(this.chore, {super.key, required this.deleteChore});
+  ChoreItem(this.chore,
+      {super.key, required this.deleteChore, required this.toggleBox});
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +20,14 @@ class ChoreItem extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                  icon: Icon(Icons.check_box_outline_blank_outlined),
-                  tooltip: 'Mark as done',
-                  onPressed: () {}
-                  //toggleBox();, // Does nothing right now
-                  ),
+                icon: Icon(chore.isDone
+                    ? Icons.check_box
+                    : Icons.check_box_outline_blank_outlined),
+                tooltip: 'Mark as done',
+                onPressed: () {
+                  toggleBox(chore);
+                },
+              ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,6 +36,10 @@ class ChoreItem extends StatelessWidget {
                   InkWell(
                     onTap: () {}, // will be able to edit the text later
                     child: Text(
+                      style: TextStyle(
+                          decoration: chore.isDone
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none),
                       chore.text,
                       textScaleFactor: 1.2,
                     ),

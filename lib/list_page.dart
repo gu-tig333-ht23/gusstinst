@@ -9,10 +9,14 @@ class ListPage extends StatelessWidget {
   // handles the deleteChore function
   final Function(Chore) deleteChore;
 
-  ListPage(this.chores, {required this.deleteChore});
+  // handles the toggleBox function
+  final Function(Chore) toggleBox;
+
+  ListPage(this.chores, {required this.deleteChore, required this.toggleBox});
 
   @override
   Widget build(BuildContext context) {
+    // secures that itemCount isn`t below 0
     final itemCount = chores.isEmpty ? 0 : chores.length * 2 - 1;
 
     return ListView.builder(
@@ -22,7 +26,11 @@ class ListPage extends StatelessWidget {
           if (choreIndex < chores.length) {
             return Column(
               children: [
-                ChoreItem(chores[choreIndex], deleteChore: deleteChore)
+                ChoreItem(
+                  chores[choreIndex],
+                  deleteChore: deleteChore,
+                  toggleBox: toggleBox,
+                )
               ],
             );
           }

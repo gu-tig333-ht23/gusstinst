@@ -63,13 +63,20 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  // function that changes the chore`s icon when clicked
+  void toggleBox(Chore chore) {
+    setState(() {
+      chore.isDone = !chore.isDone;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget
         page; // this widget switches between views when navigation rail is used
     switch (selectedIndex) {
       case 0: // home
-        page = ListPage(chores, deleteChore: deleteChore);
+        page = ListPage(chores, deleteChore: deleteChore, toggleBox: toggleBox);
         break;
       case 1: // help
         page = HelpPage();
