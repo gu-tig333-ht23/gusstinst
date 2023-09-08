@@ -9,11 +9,12 @@ class Chore {
 
   bool isDone;
 
+  // empty strings as default if no user input
   Chore(this.text,
-      {this.minute = '59',
-      this.hour = '23',
-      this.day = '31',
-      this.month = '12',
-      this.year = '2040',
+      {this.minute = '',
+      this.hour = '',
+      this.day = '',
+      this.month = '',
+      this.year = '',
       this.isDone = false});
 }
