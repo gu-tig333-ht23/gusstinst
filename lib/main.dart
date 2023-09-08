@@ -56,13 +56,20 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  // function that deletes chores from the list
+  void deleteChore(Chore chore) {
+    setState(() {
+      chores.remove(chore);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget
         page; // this widget switches between views when navigation rail is used
     switch (selectedIndex) {
       case 0: // home
-        page = ListPage(chores);
+        page = ListPage(chores, deleteChore: deleteChore);
         break;
       case 1: // help
         page = HelpPage();

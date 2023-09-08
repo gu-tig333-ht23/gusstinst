@@ -6,42 +6,30 @@ import 'chore_item.dart';
 class ListPage extends StatelessWidget {
   final List<Chore> chores;
 
-  ListPage(this.chores);
+  // handles the deleteChore function
+  final Function(Chore) deleteChore;
+
+  ListPage(this.chores, {required this.deleteChore});
 
   @override
   Widget build(BuildContext context) {
-    /*
-    List<Chore> chores = [
-      Chore('Clean bathroom'),
-      Chore('Fix the computer'),
-      Chore('Do homework'),
-      Chore('Vacuum bedroom'),
-      Chore('Walk the dog'),
-      Chore('Workout'),
-      Chore('Grocery shopping'),
-      Chore('Make the bed'),
-      Chore('Make dinner'),
-      Chore('Buy more wine'),
-      Chore('Wash the car'),
-      Chore('Help grandma'),
-      Chore('Laundry'),
-      Chore('Feed the cat')
-    ];
-*/
+    final itemCount = chores.isEmpty ? 0 : chores.length * 2 - 1;
+
     return ListView.builder(
       itemBuilder: (context, index) {
-        if (index < chores.length) {
-          return Column(
-            children: [
-              ChoreItem(chores[index]),
-              Divider(),
-            ],
-          );
-        } else {
-          return null;
+        if (index.isEven) {
+          final choreIndex = index ~/ 2;
+          if (choreIndex < chores.length) {
+            return Column(
+              children: [
+                ChoreItem(chores[choreIndex], deleteChore: deleteChore)
+              ],
+            );
+          }
         }
+        return Divider(); // Display a Divider for odd indices
       },
-      itemCount: chores.length * 2 - 1,
+      itemCount: itemCount,
     );
   }
 }

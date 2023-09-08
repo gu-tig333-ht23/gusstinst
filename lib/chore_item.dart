@@ -4,7 +4,9 @@ import 'chore.dart';
 // class for making the chore items in the list
 class ChoreItem extends StatelessWidget {
   final Chore chore;
-  ChoreItem(this.chore, {super.key});
+  final Function(Chore) deleteChore;
+
+  ChoreItem(this.chore, {super.key, required this.deleteChore});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class ChoreItem extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   InkWell(
-                    onTap: () {},
+                    onTap: () {}, // will be able to edit the text later
                     child: Text(
                       chore.text,
                       textScaleFactor: 1.2,
@@ -46,7 +48,9 @@ class ChoreItem extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.delete),
                 tooltip: 'Delete',
-                onPressed: () {}, // does nothing right now
+                onPressed: () {
+                  deleteChore(chore);
+                }, // does nothing right now, will be able to delete from list
               ),
             ],
           ),
