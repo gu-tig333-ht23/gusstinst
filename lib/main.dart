@@ -108,6 +108,58 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+// function for editing the deadline in existing chores
+  void editChoreDeadline(Chore chore, String year) {
+    TextEditingController deadlineEditController =
+        //showing current deadline
+        TextEditingController(
+            text:
+                '${chore.year}/${chore.month}/${chore.day}    ${chore.hour}:${chore.minute}');
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Edit chore deadline'),
+          content: TextField(
+            controller: deadlineEditController,
+            decoration: InputDecoration(labelText: 'Chore Deadline'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Save'),
+              onPressed: () {
+                // saving new parameters as substrings of input
+                String newYear = deadlineEditController.text.substring(0, 4);
+                String newMonth = deadlineEditController.text.substring(5, 7);
+                String newDay = deadlineEditController.text.substring(8, 10);
+                String newHour = deadlineEditController.text.substring(
+                    deadlineEditController.text.length - 5,
+                    deadlineEditController.text.length - 3);
+                String newMinute = deadlineEditController.text.substring(
+                    deadlineEditController.text.length - 2,
+                    deadlineEditController.text.length);
+                setState(() {
+                  chore.year = newYear;
+                  chore.month = newMonth;
+                  chore.day = newDay;
+                  chore.hour = newHour;
+                  chore.minute = newMinute;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget
@@ -117,7 +169,8 @@ class _MyHomePageState extends State<MyHomePage> {
         page = ListPage(chores,
             deleteChore: deleteChore,
             toggleBox: toggleBox,
-            editChoreText: editChoreText);
+            editChoreText: editChoreText,
+            editChoreDeadline: editChoreDeadline);
         break;
       case 1: // help
         page = HelpPage();

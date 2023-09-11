@@ -1,11 +1,11 @@
 class Chore {
   String text;
 
-  final String minute;
-  final String hour;
-  final String day;
-  final String month;
-  final String year;
+  String minute;
+  String hour;
+  String day;
+  String month;
+  String year;
 
   bool isDone;
 

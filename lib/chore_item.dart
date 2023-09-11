@@ -7,12 +7,14 @@ class ChoreItem extends StatelessWidget {
   final Function(Chore) deleteChore;
   final Function(Chore) toggleBox;
   final Function(Chore, String) editChoreText;
+  final Function(Chore, String) editChoreDeadline;
 
   ChoreItem(this.chore,
       {super.key,
       required this.deleteChore,
       required this.toggleBox,
-      required this.editChoreText});
+      required this.editChoreText,
+      required this.editChoreDeadline});
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +42,9 @@ class ChoreItem extends StatelessWidget {
                   InkWell(
                     // the chore text
                     onTap: () {
-                      //print(chore.text);
+                      // dialog box to edit the text
                       editChoreText(chore, chore.text);
-                    }, // will be able to edit the text later
+                    },
                     child: Text(
                       style: TextStyle(
                           decoration: chore.isDone
@@ -53,8 +55,9 @@ class ChoreItem extends StatelessWidget {
                     ),
                   ),
                   InkWell(
-                    onTap:
-                        () {}, // does nothing rn, edit the date later when clicked
+                    onTap: () {
+                      editChoreDeadline(chore, chore.year);
+                    },
                     child: Text(chore.year.isEmpty &&
                             chore.month.isEmpty &&
                             chore.day.isEmpty &&
