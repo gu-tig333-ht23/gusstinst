@@ -70,6 +70,49 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  // function that compares chores based on their deadlines
+  int compareChoresByDeadline(Chore a, Chore b) {
+    // converting the deadline parameters to DateTime format
+    DateTime deadlineA = DateTime(
+      int.tryParse(a.year) ?? 0,
+      int.tryParse(a.month) ?? 0,
+      int.tryParse(a.day) ?? 0,
+      int.tryParse(a.hour) ?? 0,
+      int.tryParse(a.minute) ?? 0,
+    );
+    DateTime deadlineB = DateTime(
+      int.tryParse(b.year) ?? 0,
+      int.tryParse(b.month) ?? 0,
+      int.tryParse(b.day) ?? 0,
+      int.tryParse(b.hour) ?? 0,
+      int.tryParse(b.minute) ?? 0,
+    );
+
+    // compares the deadlines
+    // if both chores does not have any deadline
+    if (deadlineA.isAtSameMomentAs(DateTime(0, 0, 0, 0, 0)) &&
+        deadlineB.isAtSameMomentAs(DateTime(0, 0, 0, 0, 0))) {
+      return 0; // same value
+    }
+    // if one of the chores has no deadline, it comes after the other
+    if (deadlineA.isAtSameMomentAs(DateTime(0, 0, 0, 0, 0))) {
+      return 1;
+    } else if (deadlineB.isAtSameMomentAs(DateTime(0, 0, 0, 0, 0))) {
+      return -1;
+    }
+    // compares chores with valid deadlines
+    return deadlineA.compareTo(deadlineB);
+    // returns -1 if A is before B, 0 if A and B is the same
+    // and 1 if B is before A
+  }
+
+  // function to sort the chores list according to deadlines
+  void sortChoresByDeadline() {
+    setState(() {
+      chores.sort(compareChoresByDeadline);
+    });
+  }
+
   // function for editing the chore text in existing chores
   void editChoreText(Chore chore, String newtxt) {
     TextEditingController textEditController =
@@ -177,6 +220,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    sortChoresByDeadline(); // sorts the chores before building the page
+
     Widget
         page; // this widget switches between views when navigation rail is used
     switch (selectedIndex) {
