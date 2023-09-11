@@ -122,7 +122,8 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text('Edit chore deadline'),
           content: TextField(
             controller: deadlineEditController,
-            decoration: InputDecoration(labelText: 'Chore Deadline'),
+            decoration:
+                InputDecoration(labelText: 'Format YYYY/MM/DD    HH:MM'),
           ),
           actions: <Widget>[
             TextButton(
