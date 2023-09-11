@@ -154,6 +154,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.of(context).pop();
               },
             ),
+            TextButton(
+              child: Text(
+                  'No deadline'), // will empty the strings, builds the chore item with 'No deadline'
+              onPressed: () {
+                setState(() {
+                  chore.year = '';
+                  chore.month = '';
+                  chore.day = '';
+                  chore.hour = '';
+                  chore.minute = '';
+                });
+                Navigator.of(context).pop();
+              },
+            ),
           ],
         );
       },
