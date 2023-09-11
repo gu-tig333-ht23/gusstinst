@@ -46,13 +46,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var selectedIndex = 0;
-  List<Chore> chores = [];
+  var selectedIndex = 0; // home as default
+  FilterItem selectedFilter =
+      FilterItem.all; // initializes with the "all" filter
+
+  List<Chore> chores = []; // list for all chores
+  List<Chore> filteredChores = [];
 
   // function/method that adds new chores
   void addChore(Chore chore) {
     setState(() {
       chores.add(chore);
+      updateFilteredLists();
     });
   }
 
@@ -60,6 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void deleteChore(Chore chore) {
     setState(() {
       chores.remove(chore);
+      updateFilteredLists();
     });
   }
 
@@ -67,6 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void toggleBox(Chore chore) {
     setState(() {
       chore.isDone = !chore.isDone;
+      updateFilteredLists(); // update the filter list
     });
   }
 
@@ -111,6 +118,45 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       chores.sort(compareChoresByDeadline);
     });
+  }
+
+  // function to update filtered chores
+  void updateFilteredLists() {
+    filteredChores.clear(); // clears the lists first to avoid duplicates
+
+    if (selectedFilter == FilterItem.all) {
+      filteredChores = List.from(chores);
+      //doneChores = filterDoneChores(chores);
+      //undoneChores = filterUndoneChores(chores);
+    } else if (selectedFilter == FilterItem.done) {
+      filteredChores = filterDoneChores(chores);
+      //doneChores = filterDoneChores(chores);
+    } else if (selectedFilter == FilterItem.undone) {
+      //undoneChores = filterUndoneChores(chores);
+      filteredChores = filterUndoneChores(chores);
+    }
+  }
+
+  // function to filter the chores that are done
+  List<Chore> filterDoneChores(List<Chore> chores) {
+    List<Chore> doneChores = [];
+    for (var c = 0; c < chores.length; c++) {
+      if (chores[c].isDone) {
+        doneChores.add(chores[c]);
+      }
+    }
+    return doneChores;
+  }
+
+  // function to filter the undone chores
+  List<Chore> filterUndoneChores(List<Chore> chores) {
+    List<Chore> undoneChores = [];
+    for (var c = 0; c < chores.length; c++) {
+      if (!chores[c].isDone) {
+        undoneChores.add(chores[c]);
+      }
+    }
+    return undoneChores;
   }
 
   // function for editing the chore text in existing chores
@@ -218,19 +264,40 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  List<Chore> getFilteredChores() {
+    switch (selectedFilter) {
+      case FilterItem.all:
+        return chores;
+      case FilterItem.done:
+        return filterDoneChores(chores);
+      case FilterItem.undone:
+        return filterUndoneChores(chores);
+      default:
+        return chores;
+    }
+  }
+
+  List<Chore> getChores() {
+    return getFilteredChores();
+  }
+
+  // Här byggs sidinhållet, anropas vid varje setState
   @override
   Widget build(BuildContext context) {
+    updateFilteredLists(); // updates the filtered chore lists
     sortChoresByDeadline(); // sorts the chores before building the page
 
     Widget
         page; // this widget switches between views when navigation rail is used
     switch (selectedIndex) {
       case 0: // home
-        page = ListPage(chores,
-            deleteChore: deleteChore,
-            toggleBox: toggleBox,
-            editChoreText: editChoreText,
-            editChoreDeadline: editChoreDeadline);
+        page = ListPage(
+          getChores,
+          deleteChore: deleteChore,
+          toggleBox: toggleBox,
+          editChoreText: editChoreText,
+          editChoreDeadline: editChoreDeadline,
+        );
         break;
       case 1: // help
         page = HelpPage();
@@ -254,7 +321,10 @@ class _MyHomePageState extends State<MyHomePage> {
               child: PopupMenuButton<FilterItem>(
                 icon: Icon(Icons.filter_alt),
                 onSelected: (FilterItem item) {
-                  setState(() {});
+                  setState(() {
+                    selectedFilter = item;
+                    updateFilteredLists();
+                  });
                 },
                 itemBuilder: (BuildContext context) =>
                     <PopupMenuEntry<FilterItem>>[
