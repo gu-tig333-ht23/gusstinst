@@ -3,6 +3,7 @@ import 'add_page.dart';
 import 'chore.dart';
 import 'help_page.dart';
 import 'list_page.dart';
+import 'package:provider/provider.dart';
 
 // For the popupButton, filtering chores
 enum FilterItem { all, done, undone }
@@ -126,13 +127,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (selectedFilter == FilterItem.all) {
       filteredChores = List.from(chores);
-      //doneChores = filterDoneChores(chores);
-      //undoneChores = filterUndoneChores(chores);
     } else if (selectedFilter == FilterItem.done) {
       filteredChores = filterDoneChores(chores);
-      //doneChores = filterDoneChores(chores);
     } else if (selectedFilter == FilterItem.undone) {
-      //undoneChores = filterUndoneChores(chores);
       filteredChores = filterUndoneChores(chores);
     }
   }
