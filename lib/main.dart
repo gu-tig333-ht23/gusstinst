@@ -4,12 +4,45 @@ import 'chore.dart';
 import 'help_page.dart';
 import 'list_page.dart';
 import 'package:provider/provider.dart';
+import 'chore_item.dart';
 
 // For the popupButton, filtering chores
 enum FilterItem { all, done, undone }
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => MyAppState(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ChoreList(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ChoreItem(chore),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
+}
+
+class MyAppState extends ChangeNotifier {
+  var selectedIndex = 0;
+  FilterItem selectedFilter = FilterItem.all;
+
+  // function for setting index when switching pages/views
+  void setIndex(var index) {
+    selectedIndex = index;
+    notifyListeners();
+  }
+
+  // function for setting filter when chosen
+  void setFilter(FilterItem item) {
+    selectedFilter = item;
+    notifyListeners();
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -32,50 +65,165 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Times New Roman', fontSize: 22, color: Colors.black),
         ),
       ),
-      home: const MyHomePage(title: 'ToDo - get it done!'),
+      home: MyHomePage(title: 'ToDo - get it done!'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class MyHomePage extends StatelessWidget {
+  MyHomePage({super.key, required this.title});
 
   final String title;
 
+  //List<Chore> chores = []; // list for all chores
+  //List<Chore> filteredChores = [];
+
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  Widget build(BuildContext context) {
+    final myAppState = Provider.of<MyAppState>(context);
+
+    //final choreList = Provider.of<ChoreList>(context);
+
+    //updateFilteredLists(); // updates the filtered chore lists
+    //sortChoresByDeadline(); // sorts the chores before building the page
+
+    Widget
+        page; // this widget switches between views when navigation rail is used
+    switch (myAppState.selectedIndex) {
+      case 0: // home
+        page = Placeholder();
+        //page = ListPage(
+        //getChores: getChores,
+        //deleteChore: deleteChore,
+        //toggleBox: toggleBox,
+        //editChoreText: editChoreText,
+        //editChoreDeadline: editChoreDeadline);
+
+        //page = ListPage();
+
+        break;
+      case 1: // help
+        page = HelpPage();
+        break;
+      case 2: // add chore
+        //page = AddPage(addChore); // old version
+        //page = AddPage();
+        page = Placeholder();
+        break;
+      default:
+        throw UnimplementedError('no widget for ${myAppState.selectedIndex}');
+    }
+
+    // builds the main layout surrounding all the pages/views
+    return LayoutBuilder(builder: (context, constraints) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(title),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 15),
+              child: PopupMenuButton<FilterItem>(
+                icon: Icon(Icons.filter_alt),
+                onSelected: (FilterItem item) {
+                  myAppState.setFilter(item);
+                  //updateFilteredLists();
+                },
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuEntry<FilterItem>>[
+                  const PopupMenuItem<FilterItem>(
+                    value: FilterItem.all,
+                    child: Text('all chores'),
+                  ),
+                  const PopupMenuItem<FilterItem>(
+                    value: FilterItem.done,
+                    child: Text('done'),
+                  ),
+                  const PopupMenuItem<FilterItem>(
+                    value: FilterItem.undone,
+                    child: Text('undone'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        body: Container(
+          color: Theme.of(context).colorScheme.inversePrimary,
+          child: Row(
+            children: [
+              SafeArea(
+                // will not be overlapped
+                child: NavigationRail(
+                  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                  extended: constraints.maxWidth >= 600,
+                  destinations: [
+                    NavigationRailDestination(
+                      icon: Icon(Icons.home),
+                      label: Text('Home'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.help),
+                      label: Text('Help'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.add_task),
+                      label: Text('Add chore'),
+                    ),
+                  ],
+                  selectedIndex: myAppState.selectedIndex,
+                  onDestinationSelected: (value) {
+                    myAppState.setIndex(value);
+                  },
+                ),
+              ),
+
+              // padded card with round edges with
+              // the page/view inside it
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 70, right: 10),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: page,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+  }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  var selectedIndex = 0; // home as default
-  FilterItem selectedFilter =
-      FilterItem.all; // initializes with the "all" filter
+// handles all changes to the list with chores
+class ChoreList extends ChangeNotifier {
+  final List<Chore> _chores = [];
 
-  List<Chore> chores = []; // list for all chores
-  List<Chore> filteredChores = [];
+  List<Chore> get chores => _chores;
 
   // function/method that adds new chores
   void addChore(Chore chore) {
-    setState(() {
-      chores.add(chore);
-      updateFilteredLists();
-    });
+    _chores.add(chore);
+    notifyListeners();
+    //updateFilteredLists();
   }
 
   // function that deletes chores from the list
   void deleteChore(Chore chore) {
-    setState(() {
-      chores.remove(chore);
-      updateFilteredLists();
-    });
+    _chores.remove(chore);
+    notifyListeners();
+    //updateFilteredLists();
   }
 
   // function that changes the chore`s icon when clicked
   void toggleBox(Chore chore) {
-    setState(() {
-      chore.isDone = !chore.isDone;
-      updateFilteredLists(); // update the filter list
-    });
+    chore.isDone = !chore.isDone;
+    notifyListeners();
+    //updateFilteredLists(); // update the filter list
   }
 
   // function that compares chores based on their deadlines
@@ -116,21 +264,22 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // function to sort the chores list according to deadlines
   void sortChoresByDeadline() {
-    setState(() {
-      chores.sort(compareChoresByDeadline);
-    });
+    chores.sort(compareChoresByDeadline);
+    notifyListeners();
   }
+}
 
+  /*
   // function to update filtered chores
   void updateFilteredLists() {
-    filteredChores.clear(); // clears the lists first to avoid duplicates
+    _filteredChores.clear(); // clears the lists first to avoid duplicates
 
     if (selectedFilter == FilterItem.all) {
-      filteredChores = List.from(chores);
+      _filteredChores = List.from(chores);
     } else if (selectedFilter == FilterItem.done) {
-      filteredChores = filterDoneChores(chores);
+      _filteredChores = filterDoneChores(chores);
     } else if (selectedFilter == FilterItem.undone) {
-      filteredChores = filterUndoneChores(chores);
+      _filteredChores = filterUndoneChores(chores);
     }
   }
 
@@ -155,7 +304,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     return undoneChores;
   }
-
+  */
+/*
   // function for editing the chore text in existing chores
   void editChoreText(Chore chore, String newtxt) {
     TextEditingController textEditController =
@@ -261,6 +411,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  
   List<Chore> getFilteredChores() {
     switch (selectedFilter) {
       case FilterItem.all:
@@ -275,122 +426,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   List<Chore> getChores() {
-    return getFilteredChores();
+    //return getFilteredChores();
+    return chores;
   }
 
-  // Här byggs sidinhållet, anropas vid varje setState
-  @override
-  Widget build(BuildContext context) {
-    updateFilteredLists(); // updates the filtered chore lists
-    sortChoresByDeadline(); // sorts the chores before building the page
-
-    Widget
-        page; // this widget switches between views when navigation rail is used
-    switch (selectedIndex) {
-      case 0: // home
-        page = ListPage(
-          getChores,
-          deleteChore: deleteChore,
-          toggleBox: toggleBox,
-          editChoreText: editChoreText,
-          editChoreDeadline: editChoreDeadline,
-        );
-        break;
-      case 1: // help
-        page = HelpPage();
-        break;
-      case 2: // add chore
-        page = AddPage(addChore);
-        break;
-      default:
-        throw UnimplementedError('no widget for $selectedIndex');
-    }
-
-    // builds the main layout surrounding all the pages/views
-    return LayoutBuilder(builder: (context, constraints) {
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text(widget.title),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 15),
-              child: PopupMenuButton<FilterItem>(
-                icon: Icon(Icons.filter_alt),
-                onSelected: (FilterItem item) {
-                  setState(() {
-                    selectedFilter = item;
-                    updateFilteredLists();
-                  });
-                },
-                itemBuilder: (BuildContext context) =>
-                    <PopupMenuEntry<FilterItem>>[
-                  const PopupMenuItem<FilterItem>(
-                    value: FilterItem.all,
-                    child: Text('all chores'),
-                  ),
-                  const PopupMenuItem<FilterItem>(
-                    value: FilterItem.done,
-                    child: Text('done'),
-                  ),
-                  const PopupMenuItem<FilterItem>(
-                    value: FilterItem.undone,
-                    child: Text('undone'),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        body: Container(
-          color: Theme.of(context).colorScheme.inversePrimary,
-          child: Row(
-            children: [
-              SafeArea(
-                // will not be overlapped
-                child: NavigationRail(
-                  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-                  extended: constraints.maxWidth >= 600,
-                  destinations: [
-                    NavigationRailDestination(
-                      icon: Icon(Icons.home),
-                      label: Text('Home'),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.help),
-                      label: Text('Help'),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.add_task),
-                      label: Text('Add chore'),
-                    ),
-                  ],
-                  selectedIndex: selectedIndex,
-                  onDestinationSelected: (value) {
-                    setState(() {
-                      selectedIndex = value;
-                    });
-                  },
-                ),
-              ),
-
-              // padded card with round edges with
-              // the page/view inside it
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 70, right: 10),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: page,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    });
-  }
-}
+  */

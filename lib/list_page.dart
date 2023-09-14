@@ -7,21 +7,17 @@ class ListPage extends StatelessWidget {
   final List<Chore> Function() getChores;
 
   // handles the deleteChore function
-  final Function(Chore) deleteChore;
+  //final Function(Chore) deleteChore;
   // handles the toggleBox function
-  final Function(Chore) toggleBox;
+  //final Function(Chore) toggleBox;
   // handles the editChoreText function
-  final Function(Chore, String) editChoreText;
+  //final Function(Chore, String) editChoreText;
   // handles the editChoreDeadline function
-  final Function(Chore, String) editChoreDeadline;
+  //final Function(Chore, String) editChoreDeadline;
 
   ListPage(
-    this.getChores, {
-    required this.deleteChore,
-    required this.toggleBox,
-    required this.editChoreText,
-    required this.editChoreDeadline,
-  });
+    this.getChores,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +36,6 @@ class ListPage extends StatelessWidget {
                 children: [
                   ChoreItem(
                     filteredChores[choreIndex],
-                    deleteChore: deleteChore,
-                    toggleBox: toggleBox,
-                    editChoreText: editChoreText,
-                    editChoreDeadline: editChoreDeadline,
                   ),
                 ],
               );

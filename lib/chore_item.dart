@@ -10,8 +10,7 @@ class ChoreItem extends StatelessWidget {
   final Function(Chore, String) editChoreDeadline;
 
   ChoreItem(this.chore,
-      {super.key,
-      required this.deleteChore,
+      {required this.deleteChore,
       required this.toggleBox,
       required this.editChoreText,
       required this.editChoreDeadline});
