@@ -6,10 +6,6 @@ import 'package:provider/provider.dart';
 // class for making the chore items in the list
 class ChoreItem extends StatelessWidget {
   final Chore chore;
-  //final Function(Chore) deleteChore;
-  //final Function(Chore) toggleBox;
-  //final Function(Chore, String) editChoreText;
-  //final Function(Chore, String) editChoreDeadline;
 
   ChoreItem(this.chore);
 
@@ -28,7 +24,8 @@ class ChoreItem extends StatelessWidget {
                     : Icons.check_box_outline_blank_outlined),
                 tooltip: 'Mark as done',
                 onPressed: () {
-                  //toggleBox(chore);
+                  Provider.of<ChoreList>(context, listen: false)
+                      .toggleBox(chore);
                 },
               ),
               Column(
@@ -71,7 +68,8 @@ class ChoreItem extends StatelessWidget {
                 icon: Icon(Icons.delete),
                 tooltip: 'Delete',
                 onPressed: () {
-                  //deleteChore(chore);
+                  Provider.of<ChoreList>(context, listen: false)
+                      .deleteChore(chore);
                 },
               ),
             ],

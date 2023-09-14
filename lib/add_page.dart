@@ -6,9 +6,6 @@ import 'package:provider/provider.dart';
 
 // View for adding new chores
 class AddPage extends StatelessWidget {
-  //final Function(Chore) addChore;
-  // callback for adding new chores
-
   // controllers for saving text input when adding new chores
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _yearController = TextEditingController();
@@ -132,8 +129,6 @@ class AddPage extends StatelessWidget {
 
               // Adds chore to the chores list
               Provider.of<ChoreList>(context, listen: false).addChore(newChore);
-
-              //addChore(newChore);
             }
             // Clears the input fields
             _textController.clear();
