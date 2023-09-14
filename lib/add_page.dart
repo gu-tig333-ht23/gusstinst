@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'chore.dart';
 import 'chore_list.dart';
-import 'chore_item.dart';
 import 'package:provider/provider.dart';
 
 // View for adding new chores

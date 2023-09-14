@@ -37,7 +37,8 @@ class ChoreItem extends StatelessWidget {
                     // the chore text
                     onTap: () {
                       // dialog box to edit the text
-                      //editChoreText(chore, chore.text);
+                      Provider.of<ChoreList>(context, listen: false)
+                          .editChoreText(context, chore, chore.text);
                     },
                     child: Text(
                       style: TextStyle(
@@ -50,7 +51,8 @@ class ChoreItem extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      //editChoreDeadline(chore, chore.year);
+                      Provider.of<ChoreList>(context, listen: false)
+                          .editChoreDeadline(context, chore, chore.year);
                     },
                     child: Text(chore.year.isEmpty &&
                             chore.month.isEmpty &&

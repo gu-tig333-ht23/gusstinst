@@ -7,10 +7,6 @@ import 'chore_list.dart';
 
 // view to receive and show chores
 class ListPage extends StatelessWidget {
-  // handles the deleteChore function
-  //final Function(Chore) deleteChore;
-  // handles the toggleBox function
-  //final Function(Chore) toggleBox;
   // handles the editChoreText function
   //final Function(Chore, String) editChoreText;
   // handles the editChoreDeadline function
@@ -28,9 +24,11 @@ class ListPage extends StatelessWidget {
         case FilterItem.all:
           return chores;
         case FilterItem.done:
-          return filterDoneChores(chores);
+          return Provider.of<ChoreList>(context, listen: false)
+              .filterDoneChores(chores);
         case FilterItem.undone:
-          return filterUndoneChores(chores);
+          return Provider.of<ChoreList>(context, listen: false)
+              .filterUndoneChores(chores);
         default:
           return chores;
       }

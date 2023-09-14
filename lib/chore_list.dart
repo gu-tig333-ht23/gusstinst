@@ -67,54 +67,37 @@ class ChoreList extends ChangeNotifier {
     chores.sort(compareChoresByDeadline);
     notifyListeners();
   }
-}
-
-/*
-  // function to update filtered chores
-  void updateFilteredLists() {
-    _filteredChores.clear(); // clears the lists first to avoid duplicates
-
-    if (selectedFilter == FilterItem.all) {
-      _filteredChores = List.from(chores);
-    } else if (selectedFilter == FilterItem.done) {
-      _filteredChores = filterDoneChores(chores);
-    } else if (selectedFilter == FilterItem.undone) {
-      _filteredChores = filterUndoneChores(chores);
-    }
-  }
-  */
 
 // function to filter the chores that are done
-List<Chore> filterDoneChores(List<Chore> chores) {
-  List<Chore> doneChores = [];
-  for (var c = 0; c < chores.length; c++) {
-    if (chores[c].isDone) {
-      doneChores.add(chores[c]);
+  List<Chore> filterDoneChores(List<Chore> chores) {
+    List<Chore> doneChores = [];
+    for (var c = 0; c < chores.length; c++) {
+      if (chores[c].isDone) {
+        doneChores.add(chores[c]);
+      }
     }
+    return doneChores;
   }
-  return doneChores;
-}
 
 // function to filter the undone chores
-List<Chore> filterUndoneChores(List<Chore> chores) {
-  List<Chore> undoneChores = [];
-  for (var c = 0; c < chores.length; c++) {
-    if (!chores[c].isDone) {
-      undoneChores.add(chores[c]);
+  List<Chore> filterUndoneChores(List<Chore> chores) {
+    List<Chore> undoneChores = [];
+    for (var c = 0; c < chores.length; c++) {
+      if (!chores[c].isDone) {
+        undoneChores.add(chores[c]);
+      }
     }
+    return undoneChores;
   }
-  return undoneChores;
-}
-  
-/*
-  // function for editing the chore text in existing chores
-  void editChoreText(Chore chore, String newtxt) {
+
+// function for editing the chore text in existing chores
+  void editChoreText(BuildContext context, Chore chore, String newtxt) {
     TextEditingController textEditController =
         TextEditingController(text: chore.text); //showing current text
 
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (context) {
         return AlertDialog(
           title: Text('Edit chore text'),
           content: TextField(
@@ -133,9 +116,9 @@ List<Chore> filterUndoneChores(List<Chore> chores) {
               onPressed: () {
                 String newText = textEditController.text;
                 print(newText); // control
-                setState(() {
-                  chore.text = newText;
-                });
+                chore.text = newText;
+                notifyListeners();
+
                 Navigator.of(context).pop();
               },
             ),
@@ -146,7 +129,7 @@ List<Chore> filterUndoneChores(List<Chore> chores) {
   }
 
 // function for editing the deadline in existing chores
-  void editChoreDeadline(Chore chore, String year) {
+  void editChoreDeadline(BuildContext context, Chore chore, String year) {
     TextEditingController deadlineEditController =
         //showing current deadline
         TextEditingController(
@@ -182,13 +165,15 @@ List<Chore> filterUndoneChores(List<Chore> chores) {
                 String newMinute = deadlineEditController.text.substring(
                     deadlineEditController.text.length - 2,
                     deadlineEditController.text.length);
-                setState(() {
-                  chore.year = newYear;
-                  chore.month = newMonth;
-                  chore.day = newDay;
-                  chore.hour = newHour;
-                  chore.minute = newMinute;
-                });
+
+                // updates chore parameters
+                chore.year = newYear;
+                chore.month = newMonth;
+                chore.day = newDay;
+                chore.hour = newHour;
+                chore.minute = newMinute;
+                notifyListeners();
+
                 Navigator.of(context).pop();
               },
             ),
@@ -196,13 +181,13 @@ List<Chore> filterUndoneChores(List<Chore> chores) {
               child: Text(
                   'No deadline'), // will empty the strings, builds the chore item with 'No deadline'
               onPressed: () {
-                setState(() {
-                  chore.year = '';
-                  chore.month = '';
-                  chore.day = '';
-                  chore.hour = '';
-                  chore.minute = '';
-                });
+                chore.year = '';
+                chore.month = '';
+                chore.day = '';
+                chore.hour = '';
+                chore.minute = '';
+                notifyListeners();
+
                 Navigator.of(context).pop();
               },
             ),
@@ -211,4 +196,4 @@ List<Chore> filterUndoneChores(List<Chore> chores) {
       },
     );
   }
-*/
+}

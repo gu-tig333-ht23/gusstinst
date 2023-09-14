@@ -74,15 +74,10 @@ class MyHomePage extends StatelessWidget {
 
   final String title;
 
-  Function(Chore p1) get addChore => addChore;
-
   @override
   Widget build(BuildContext context) {
     final myAppState = Provider.of<MyAppState>(context);
 
-    final choreList = Provider.of<ChoreList>(context);
-
-    //updateFilteredLists(); // updates the filtered chore lists
     //sortChoresByDeadline(); // sorts the chores before building the page
 
     Widget
