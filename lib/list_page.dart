@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'chore.dart';
 import 'chore_item.dart';
+import 'package:provider/provider.dart';
+import 'main.dart';
+import 'chore_list.dart';
 
 // view to receive and show chores
 class ListPage extends StatelessWidget {
-  final List<Chore> Function() getChores;
-
   // handles the deleteChore function
   //final Function(Chore) deleteChore;
   // handles the toggleBox function
@@ -15,13 +16,28 @@ class ListPage extends StatelessWidget {
   // handles the editChoreDeadline function
   //final Function(Chore, String) editChoreDeadline;
 
-  ListPage(
-    this.getChores,
-  );
+  //ListPage();
 
   @override
   Widget build(BuildContext context) {
-    final filteredChores = getChores();
+    var chores = context.watch<ChoreList>().chores;
+    var currentFilter = context.watch<MyAppState>().selectedFilter;
+
+    List<Chore> getFilteredChores() {
+      switch (currentFilter) {
+        case FilterItem.all:
+          return chores;
+        case FilterItem.done:
+          return filterDoneChores(chores);
+        case FilterItem.undone:
+          return filterUndoneChores(chores);
+        default:
+          return chores;
+      }
+    }
+
+    final filteredChores = getFilteredChores();
+
     // secures that itemCount isn`t below 0
     final itemCount =
         filteredChores.isEmpty ? 0 : filteredChores.length * 2 - 1;
@@ -34,9 +50,7 @@ class ListPage extends StatelessWidget {
             if (choreIndex < filteredChores.length) {
               return Column(
                 children: [
-                  ChoreItem(
-                    filteredChores[choreIndex],
-                  ),
+                  ChoreItem(filteredChores[choreIndex]),
                 ],
               );
             }

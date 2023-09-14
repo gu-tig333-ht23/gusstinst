@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'chore.dart';
+import 'chore_list.dart';
+import 'package:provider/provider.dart';
 
 // class for making the chore items in the list
 class ChoreItem extends StatelessWidget {
   final Chore chore;
-  final Function(Chore) deleteChore;
-  final Function(Chore) toggleBox;
-  final Function(Chore, String) editChoreText;
-  final Function(Chore, String) editChoreDeadline;
+  //final Function(Chore) deleteChore;
+  //final Function(Chore) toggleBox;
+  //final Function(Chore, String) editChoreText;
+  //final Function(Chore, String) editChoreDeadline;
 
-  ChoreItem(this.chore,
-      {required this.deleteChore,
-      required this.toggleBox,
-      required this.editChoreText,
-      required this.editChoreDeadline});
+  ChoreItem(this.chore);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +28,7 @@ class ChoreItem extends StatelessWidget {
                     : Icons.check_box_outline_blank_outlined),
                 tooltip: 'Mark as done',
                 onPressed: () {
-                  toggleBox(chore);
+                  //toggleBox(chore);
                 },
               ),
               Column(
@@ -42,7 +40,7 @@ class ChoreItem extends StatelessWidget {
                     // the chore text
                     onTap: () {
                       // dialog box to edit the text
-                      editChoreText(chore, chore.text);
+                      //editChoreText(chore, chore.text);
                     },
                     child: Text(
                       style: TextStyle(
@@ -55,7 +53,7 @@ class ChoreItem extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      editChoreDeadline(chore, chore.year);
+                      //editChoreDeadline(chore, chore.year);
                     },
                     child: Text(chore.year.isEmpty &&
                             chore.month.isEmpty &&
@@ -73,7 +71,7 @@ class ChoreItem extends StatelessWidget {
                 icon: Icon(Icons.delete),
                 tooltip: 'Delete',
                 onPressed: () {
-                  deleteChore(chore);
+                  //deleteChore(chore);
                 },
               ),
             ],

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'chore.dart';
+import 'chore_list.dart';
+import 'chore_item.dart';
+import 'package:provider/provider.dart';
 
 // View for adding new chores
 class AddPage extends StatelessWidget {
-  final Function(Chore) addChore;
+  //final Function(Chore) addChore;
   // callback for adding new chores
-  AddPage(this.addChore);
 
   // controllers for saving text input when adding new chores
   final TextEditingController _textController = TextEditingController();
@@ -129,7 +131,9 @@ class AddPage extends StatelessWidget {
               );
 
               // Adds chore to the chores list
-              addChore(newChore);
+              Provider.of<ChoreList>(context, listen: false).addChore(newChore);
+
+              //addChore(newChore);
             }
             // Clears the input fields
             _textController.clear();
