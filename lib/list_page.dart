@@ -7,13 +7,6 @@ import 'chore_list.dart';
 
 // view to receive and show chores
 class ListPage extends StatelessWidget {
-  // handles the editChoreText function
-  //final Function(Chore, String) editChoreText;
-  // handles the editChoreDeadline function
-  //final Function(Chore, String) editChoreDeadline;
-
-  //ListPage();
-
   @override
   Widget build(BuildContext context) {
     var chores = context.watch<ChoreList>().chores;
@@ -34,7 +27,10 @@ class ListPage extends StatelessWidget {
       }
     }
 
+    // get the current list according to filters
     final filteredChores = getFilteredChores();
+    // sorts the chores in the list according to their deadlines
+    Provider.of<ChoreList>(context, listen: false).sortChoresByDeadline();
 
     // secures that itemCount isn`t below 0
     final itemCount =

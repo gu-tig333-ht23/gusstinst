@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'add_page.dart';
-import 'chore.dart';
 import 'help_page.dart';
 import 'list_page.dart';
 import 'package:provider/provider.dart';
-import 'chore_item.dart';
 import 'chore_list.dart';
 
 // For the popupButton, filtering chores
@@ -84,16 +82,13 @@ class MyHomePage extends StatelessWidget {
         page; // this widget switches between views when navigation rail is used
     switch (myAppState.selectedIndex) {
       case 0: // home
-        //page = Placeholder();
         page = ListPage();
         break;
       case 1: // help
         page = HelpPage();
         break;
       case 2: // add chore
-        //page = AddPage(addChore); // old version
         page = AddPage();
-        //page = Placeholder();
         break;
       default:
         throw UnimplementedError('no widget for ${myAppState.selectedIndex}');

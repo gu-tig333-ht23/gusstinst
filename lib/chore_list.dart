@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'chore.dart';
-import 'package:provider/provider.dart';
 
 // handles all changes to the list with chores
 class ChoreList extends ChangeNotifier {
