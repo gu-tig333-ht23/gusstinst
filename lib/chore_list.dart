@@ -14,9 +14,32 @@ class ChoreList extends ChangeNotifier {
   }
 
   // function that deletes chores from the list
-  void deleteChore(Chore chore) {
-    _chores.remove(chore);
-    notifyListeners();
+  void deleteChore(BuildContext context, Chore chore) {
+    // dialog box checks if user is sure about deleting
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Delete this chore?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Delete'),
+              onPressed: () {
+                _chores.remove(chore);
+                notifyListeners();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   // function that changes the chore`s icon when clicked

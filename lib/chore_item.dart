@@ -71,7 +71,7 @@ class ChoreItem extends StatelessWidget {
                 tooltip: 'Delete',
                 onPressed: () {
                   Provider.of<ChoreList>(context, listen: false)
-                      .deleteChore(chore);
+                      .deleteChore(context, chore);
                 },
               ),
             ],
