@@ -48,23 +48,23 @@ class ChoreList extends ChangeNotifier {
     notifyListeners();
   }
 
+  // function that converts the deadline parameters to DateTime format
+  DateTime convertDeadlineToDT(Chore chore) {
+    DateTime deadlineAsDT = DateTime(
+      int.tryParse(chore.year) ?? 0,
+      int.tryParse(chore.month) ?? 0,
+      int.tryParse(chore.day) ?? 0,
+      int.tryParse(chore.hour) ?? 0,
+      int.tryParse(chore.minute) ?? 0,
+    );
+    return deadlineAsDT;
+  }
+
   // function that compares chores based on their deadlines
   int compareChoresByDeadline(Chore a, Chore b) {
     // converting the deadline parameters to DateTime format
-    DateTime deadlineA = DateTime(
-      int.tryParse(a.year) ?? 0,
-      int.tryParse(a.month) ?? 0,
-      int.tryParse(a.day) ?? 0,
-      int.tryParse(a.hour) ?? 0,
-      int.tryParse(a.minute) ?? 0,
-    );
-    DateTime deadlineB = DateTime(
-      int.tryParse(b.year) ?? 0,
-      int.tryParse(b.month) ?? 0,
-      int.tryParse(b.day) ?? 0,
-      int.tryParse(b.hour) ?? 0,
-      int.tryParse(b.minute) ?? 0,
-    );
+    DateTime deadlineA = convertDeadlineToDT(a);
+    DateTime deadlineB = convertDeadlineToDT(b);
 
     // compares the deadlines
     // if both chores does not have any deadline

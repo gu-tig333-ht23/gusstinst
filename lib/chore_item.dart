@@ -11,6 +11,11 @@ class ChoreItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color chill = Colors.green;
+    Color moveOn = Colors.orange;
+    Color hurry = const Color.fromARGB(211, 255, 86, 34);
+    Color late = const Color.fromARGB(255, 79, 8, 3);
+
     return Column(
       children: [
         Padding(
@@ -49,18 +54,25 @@ class ChoreItem extends StatelessWidget {
                       textScaleFactor: 1.2,
                     ),
                   ),
-                  InkWell(
-                    onTap: () {
-                      Provider.of<ChoreList>(context, listen: false)
-                          .editChoreDeadline(context, chore, chore.year);
-                    },
-                    child: Text(chore.year.isEmpty &&
-                            chore.month.isEmpty &&
-                            chore.day.isEmpty &&
-                            chore.hour.isEmpty &&
-                            chore.minute.isEmpty
-                        ? 'No deadline'
-                        : '${chore.year}/${chore.month}/${chore.day}    ${chore.hour}:${chore.minute}'),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: chill,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        // dialog box to edit the deadline
+                        Provider.of<ChoreList>(context, listen: false)
+                            .editChoreDeadline(context, chore, chore.year);
+                      },
+                      child: Text(chore.year.isEmpty &&
+                              chore.month.isEmpty &&
+                              chore.day.isEmpty &&
+                              chore.hour.isEmpty &&
+                              chore.minute.isEmpty
+                          ? 'No deadline'
+                          : '${chore.year}/${chore.month}/${chore.day}    ${chore.hour}:${chore.minute}'),
+                    ),
                   ),
                 ],
               ),
