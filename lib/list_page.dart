@@ -36,6 +36,14 @@ class ListPage extends StatelessWidget {
     final itemCount =
         filteredChores.isEmpty ? 0 : filteredChores.length * 2 - 1;
 
+    if (currentFilter == FilterItem.all && filteredChores.isEmpty) {
+      return Text(
+          'You have no chores! Create a new one by clicking the checkbox-icon in the navigation rail!');
+    } else if (currentFilter == FilterItem.done && filteredChores.isEmpty) {
+      return Text('You haven`t fulfilled any chores yet. Get them done!');
+    } else if (currentFilter == FilterItem.undone && filteredChores.isEmpty) {
+      return Text('You have done it all! Hooray!');
+    }
     return ListView.builder(
         itemCount: itemCount,
         itemBuilder: (context, index) {
