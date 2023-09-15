@@ -11,10 +11,35 @@ class ChoreItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color chill = Colors.green;
-    Color moveOn = Colors.orange;
-    Color hurry = const Color.fromARGB(211, 255, 86, 34);
-    Color late = const Color.fromARGB(255, 79, 8, 3);
+    Color getColorForChoreStatus(chore) {
+      final now = DateTime.now();
+      final choreDeadline = Provider.of<ChoreList>(context, listen: false)
+          .convertDeadlineToDT(chore);
+      final timeDifference = choreDeadline.difference(now);
+      print(timeDifference);
+
+      if (timeDifference.inDays >= 2 ||
+          chore.year.isEmpty &&
+              chore.month.isEmpty &&
+              chore.day.isEmpty &&
+              chore.hour.isEmpty &&
+              chore.minute.isEmpty) {
+        // two or more days left or no deadline set
+        return Colors.green;
+      } else if (timeDifference.inDays < 2 && timeDifference.inHours >= 4) {
+        // less than two days left but more than 4 hours
+        return Colors.yellow;
+      } else if (timeDifference.inHours < 4 && timeDifference.inHours >= 0) {
+        // less than four hours left
+        return Colors.orange;
+      } else if (timeDifference.isNegative) {
+        // deadline passed
+        return const Color.fromARGB(255, 79, 8, 3);
+      } else {
+        print('Default color');
+        return Colors.green;
+      }
+    }
 
     return Column(
       children: [
@@ -56,22 +81,32 @@ class ChoreItem extends StatelessWidget {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                      color: chill,
                       borderRadius: BorderRadius.circular(8),
+                      color: getColorForChoreStatus(chore),
                     ),
-                    child: InkWell(
-                      onTap: () {
-                        // dialog box to edit the deadline
-                        Provider.of<ChoreList>(context, listen: false)
-                            .editChoreDeadline(context, chore, chore.year);
-                      },
-                      child: Text(chore.year.isEmpty &&
-                              chore.month.isEmpty &&
-                              chore.day.isEmpty &&
-                              chore.hour.isEmpty &&
-                              chore.minute.isEmpty
-                          ? 'No deadline'
-                          : '${chore.year}/${chore.month}/${chore.day}    ${chore.hour}:${chore.minute}'),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: InkWell(
+                        onTap: () {
+                          // dialog box to edit the deadline
+                          Provider.of<ChoreList>(context, listen: false)
+                              .editChoreDeadline(context, chore, chore.year);
+                        },
+                        child: Text(
+                          chore.year.isEmpty &&
+                                  chore.month.isEmpty &&
+                                  chore.day.isEmpty &&
+                                  chore.hour.isEmpty &&
+                                  chore.minute.isEmpty
+                              ? 'No deadline'
+                              : '${chore.year}/${chore.month}/${chore.day}    ${chore.hour}:${chore.minute}',
+                          style: TextStyle(
+                              color: getColorForChoreStatus(chore) ==
+                                      const Color.fromARGB(255, 79, 8, 3)
+                                  ? Colors.white
+                                  : Colors.black),
+                        ),
+                      ),
                     ),
                   ),
                 ],
