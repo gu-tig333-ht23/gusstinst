@@ -27,7 +27,7 @@ void main() {
 
 class MyAppState extends ChangeNotifier {
   var selectedIndex = 0;
-  FilterItem selectedFilter = FilterItem.all;
+  FilterItem selectedFilter = FilterItem.all; // shows all by default
 
   // function for setting index when switching pages/views
   void setIndex(var index) {
@@ -75,8 +75,6 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final myAppState = Provider.of<MyAppState>(context);
-
-    //sortChoresByDeadline(); // sorts the chores before building the page
 
     Widget
         page; // this widget switches between views when navigation rail is used

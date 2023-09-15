@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'main.dart';
 import 'chore_list.dart';
 
-// view to receive and show chores
+// view to list/show chores
 class ListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

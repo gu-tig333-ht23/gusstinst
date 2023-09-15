@@ -3,7 +3,7 @@ import 'chore.dart';
 import 'chore_list.dart';
 import 'package:provider/provider.dart';
 
-// class for making the chore items in the list
+// class/widget for viewing the chore items in the list
 class ChoreItem extends StatelessWidget {
   final Chore chore;
 

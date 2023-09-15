@@ -1,3 +1,4 @@
+// Class for creating chore objects with all parameters
 class Chore {
   String text;
 
@@ -9,12 +10,12 @@ class Chore {
 
   bool isDone;
 
-  // empty strings as default if no user input
+  // empty strings as default if no user input when adding new chores
   Chore(this.text,
       {this.minute = '',
       this.hour = '',
       this.day = '',
       this.month = '',
       this.year = '',
-      this.isDone = false});
+      this.isDone = false}); // the chore is undone by default when created
 }

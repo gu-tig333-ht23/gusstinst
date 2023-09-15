@@ -92,7 +92,7 @@ class ChoreList extends ChangeNotifier {
 // function for editing the chore text in existing chores
   void editChoreText(BuildContext context, Chore chore, String newtxt) {
     TextEditingController textEditController =
-        TextEditingController(text: chore.text); //showing current text
+        TextEditingController(text: chore.text); //showing current chore text
 
     showDialog(
       context: context,
@@ -114,10 +114,9 @@ class ChoreList extends ChangeNotifier {
               child: Text('Save'),
               onPressed: () {
                 String newText = textEditController.text;
-                print(newText); // control
                 chore.text = newText;
-                notifyListeners();
 
+                notifyListeners();
                 Navigator.of(context).pop();
               },
             ),
@@ -171,8 +170,8 @@ class ChoreList extends ChangeNotifier {
                 chore.day = newDay;
                 chore.hour = newHour;
                 chore.minute = newMinute;
-                notifyListeners();
 
+                notifyListeners();
                 Navigator.of(context).pop();
               },
             ),
@@ -185,8 +184,8 @@ class ChoreList extends ChangeNotifier {
                 chore.day = '';
                 chore.hour = '';
                 chore.minute = '';
-                notifyListeners();
 
+                notifyListeners();
                 Navigator.of(context).pop();
               },
             ),
