@@ -138,6 +138,63 @@ class AddPage extends StatelessWidget {
             _minuteController.clear();
           },
         ),
+        SizedBox(height: 10),
+
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text('What does the deadline colors mean?'),
+            Padding(
+              padding:
+                  const EdgeInsets.only(top: 8.0, bottom: 2, left: 8, right: 8),
+              child: Container(
+                alignment: Alignment.topLeft,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.green),
+                padding: EdgeInsets.all(4),
+                child: Text('Chill                 >2 days left/No deadline'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 2, left: 8, right: 8.0),
+              child: Container(
+                alignment: Alignment.topLeft,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.yellow),
+                padding: EdgeInsets.all(4),
+                child:
+                    Text('Move on                                <2 days left'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 2, left: 8, right: 8.0),
+              child: Container(
+                alignment: Alignment.topLeft,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.orange),
+                padding: EdgeInsets.all(4),
+                child: Text(
+                    'Hurry                                    <4 hours left'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 2, left: 8, right: 8.0),
+              child: Container(
+                alignment: Alignment.topLeft,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: const Color.fromARGB(255, 79, 8, 3)),
+                padding: EdgeInsets.all(4),
+                child: Text(
+                    'Late                                deadline passed',
+                    style: TextStyle(color: Colors.white)),
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }

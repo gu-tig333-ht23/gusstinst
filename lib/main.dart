@@ -154,7 +154,45 @@ class MyHomePage extends StatelessWidget {
                   },
                 ),
               ),
-
+              /*
+              Align(
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.green),
+                      padding: EdgeInsets.all(4),
+                      child: Text('Chill'),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.yellow),
+                      padding: EdgeInsets.all(4),
+                      child: Text('Move on'),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.orange),
+                      padding: EdgeInsets.all(4),
+                      child: Text('Hurry'),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: const Color.fromARGB(255, 79, 8, 3)),
+                      padding: EdgeInsets.all(4),
+                      child:
+                          Text('Late', style: TextStyle(color: Colors.white)),
+                    ),
+                  ],
+                ),
+              ),
+            */
               // padded card with round edges with
               // the page/view inside it
               Expanded(

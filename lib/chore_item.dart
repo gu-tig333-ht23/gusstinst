@@ -16,7 +16,6 @@ class ChoreItem extends StatelessWidget {
       final choreDeadline = Provider.of<ChoreList>(context, listen: false)
           .convertDeadlineToDT(chore);
       final timeDifference = choreDeadline.difference(now);
-      print(timeDifference);
 
       if (timeDifference.inDays >= 2 ||
           chore.year.isEmpty &&
@@ -36,7 +35,6 @@ class ChoreItem extends StatelessWidget {
         // deadline passed
         return const Color.fromARGB(255, 79, 8, 3);
       } else {
-        print('Default color');
         return Colors.green;
       }
     }
