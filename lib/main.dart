@@ -99,7 +99,7 @@ class MyHomePage extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: Text(title),
-          toolbarHeight: kToolbarHeight + 4,
+          toolbarHeight: kToolbarHeight + 6,
           actions: [
             Column(
               children: [
@@ -132,7 +132,7 @@ class MyHomePage extends StatelessWidget {
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
                       'Current filter: ${myAppState.selectedFilter.name}',
-                      style: TextStyle(fontSize: 8)),
+                      style: TextStyle(fontSize: 10)),
                 ),
               ],
             ),

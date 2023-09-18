@@ -18,11 +18,11 @@ class ChoreItem extends StatelessWidget {
       final timeDifference = choreDeadline.difference(now);
 
       if (timeDifference.inDays >= 2 ||
-          chore.year.isEmpty &&
-              chore.month.isEmpty &&
-              chore.day.isEmpty &&
-              chore.hour.isEmpty &&
-              chore.minute.isEmpty) {
+          chore.year == '0000' &&
+              chore.month == '00' &&
+              chore.day == '00' &&
+              chore.hour == '00' &&
+              chore.minute == '00') {
         // two or more days left or no deadline set
         return Colors.green;
       } else if (timeDifference.inDays < 2 && timeDifference.inHours >= 4) {
@@ -91,11 +91,11 @@ class ChoreItem extends StatelessWidget {
                               .editChoreDeadline(context, chore, chore.year);
                         },
                         child: Text(
-                          chore.year.isEmpty &&
-                                  chore.month.isEmpty &&
-                                  chore.day.isEmpty &&
-                                  chore.hour.isEmpty &&
-                                  chore.minute.isEmpty
+                          chore.year == '0000' &&
+                                  chore.month == '00' &&
+                                  chore.day == '00' &&
+                                  chore.hour == '00' &&
+                                  chore.minute == '00'
                               ? 'No deadline'
                               : '${chore.year}/${chore.month}/${chore.day}    ${chore.hour}:${chore.minute}',
                           style: TextStyle(
