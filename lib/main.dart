@@ -99,30 +99,42 @@ class MyHomePage extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: Text(title),
+          toolbarHeight: kToolbarHeight + 4,
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 15),
-              child: PopupMenuButton<FilterItem>(
-                icon: Icon(Icons.filter_alt),
-                onSelected: (FilterItem item) {
-                  myAppState.setFilter(item);
-                },
-                itemBuilder: (BuildContext context) =>
-                    <PopupMenuEntry<FilterItem>>[
-                  const PopupMenuItem<FilterItem>(
-                    value: FilterItem.all,
-                    child: Text('all chores'),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: PopupMenuButton<FilterItem>(
+                    tooltip: 'Filter chores',
+                    icon: Icon(Icons.filter_alt),
+                    onSelected: (FilterItem item) {
+                      myAppState.setFilter(item);
+                    },
+                    itemBuilder: (BuildContext context) =>
+                        <PopupMenuEntry<FilterItem>>[
+                      const PopupMenuItem<FilterItem>(
+                        value: FilterItem.all,
+                        child: Text('all chores'),
+                      ),
+                      const PopupMenuItem<FilterItem>(
+                        value: FilterItem.done,
+                        child: Text('done'),
+                      ),
+                      const PopupMenuItem<FilterItem>(
+                        value: FilterItem.undone,
+                        child: Text('undone'),
+                      ),
+                    ],
                   ),
-                  const PopupMenuItem<FilterItem>(
-                    value: FilterItem.done,
-                    child: Text('done'),
-                  ),
-                  const PopupMenuItem<FilterItem>(
-                    value: FilterItem.undone,
-                    child: Text('undone'),
-                  ),
-                ],
-              ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Text(
+                      'Current filter: ${myAppState.selectedFilter.name}',
+                      style: TextStyle(fontSize: 8)),
+                ),
+              ],
             ),
           ],
         ),
