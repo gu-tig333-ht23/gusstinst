@@ -1,14 +1,45 @@
 import 'package:flutter/material.dart';
 import 'add_page.dart';
-import 'chore.dart';
 import 'help_page.dart';
 import 'list_page.dart';
+import 'package:provider/provider.dart';
+import 'chore_list.dart';
 
 // For the popupButton, filtering chores
 enum FilterItem { all, done, undone }
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) =>
+              MyAppState(), // tracks the selected filter and the page index
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ChoreList(), // tracks the list with chores
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
+}
+
+class MyAppState extends ChangeNotifier {
+  var selectedIndex = 0;
+  FilterItem selectedFilter = FilterItem.all; // shows all by default
+
+  // function for setting index when switching pages/views
+  void setIndex(var index) {
+    selectedIndex = index;
+    notifyListeners();
+  }
+
+  // function for setting filter when chosen
+  void setFilter(FilterItem item) {
+    selectedFilter = item;
+    notifyListeners();
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -18,6 +49,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'ToDo',
       theme: ThemeData(
         // This is the theme of the application.
@@ -31,170 +63,34 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Times New Roman', fontSize: 22, color: Colors.black),
         ),
       ),
-      home: const MyHomePage(title: 'ToDo - get it done!'),
+      home: MyHomePage(title: 'ToDo - get it done!'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class MyHomePage extends StatelessWidget {
+  MyHomePage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  var selectedIndex = 0;
-  List<Chore> chores = [];
-
-  // function/method that adds new chores
-  void addChore(Chore chore) {
-    setState(() {
-      chores.add(chore);
-    });
-  }
-
-  // function that deletes chores from the list
-  void deleteChore(Chore chore) {
-    setState(() {
-      chores.remove(chore);
-    });
-  }
-
-  // function that changes the chore`s icon when clicked
-  void toggleBox(Chore chore) {
-    setState(() {
-      chore.isDone = !chore.isDone;
-    });
-  }
-
-  // function for editing the chore text in existing chores
-  void editChoreText(Chore chore, String newtxt) {
-    TextEditingController textEditController =
-        TextEditingController(text: chore.text); //showing current text
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Edit chore text'),
-          content: TextField(
-            controller: textEditController,
-            decoration: InputDecoration(labelText: 'Chore Text'),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Save'),
-              onPressed: () {
-                String newText = textEditController.text;
-                print(newText); // control
-                setState(() {
-                  chore.text = newText;
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-// function for editing the deadline in existing chores
-  void editChoreDeadline(Chore chore, String year) {
-    TextEditingController deadlineEditController =
-        //showing current deadline
-        TextEditingController(
-            text:
-                '${chore.year}/${chore.month}/${chore.day}    ${chore.hour}:${chore.minute}');
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Edit chore deadline'),
-          content: TextField(
-            controller: deadlineEditController,
-            decoration:
-                InputDecoration(labelText: 'Format YYYY/MM/DD    HH:MM'),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Save'),
-              onPressed: () {
-                // saving new parameters as substrings of input
-                String newYear = deadlineEditController.text.substring(0, 4);
-                String newMonth = deadlineEditController.text.substring(5, 7);
-                String newDay = deadlineEditController.text.substring(8, 10);
-                String newHour = deadlineEditController.text.substring(
-                    deadlineEditController.text.length - 5,
-                    deadlineEditController.text.length - 3);
-                String newMinute = deadlineEditController.text.substring(
-                    deadlineEditController.text.length - 2,
-                    deadlineEditController.text.length);
-                setState(() {
-                  chore.year = newYear;
-                  chore.month = newMonth;
-                  chore.day = newDay;
-                  chore.hour = newHour;
-                  chore.minute = newMinute;
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text(
-                  'No deadline'), // will empty the strings, builds the chore item with 'No deadline'
-              onPressed: () {
-                setState(() {
-                  chore.year = '';
-                  chore.month = '';
-                  chore.day = '';
-                  chore.hour = '';
-                  chore.minute = '';
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final myAppState = Provider.of<MyAppState>(context);
+
     Widget
         page; // this widget switches between views when navigation rail is used
-    switch (selectedIndex) {
+    switch (myAppState.selectedIndex) {
       case 0: // home
-        page = ListPage(chores,
-            deleteChore: deleteChore,
-            toggleBox: toggleBox,
-            editChoreText: editChoreText,
-            editChoreDeadline: editChoreDeadline);
+        page = ListPage();
         break;
       case 1: // help
         page = HelpPage();
         break;
       case 2: // add chore
-        page = AddPage(addChore);
+        page = AddPage();
         break;
       default:
-        throw UnimplementedError('no widget for $selectedIndex');
+        throw UnimplementedError('no widget for ${myAppState.selectedIndex}');
     }
 
     // builds the main layout surrounding all the pages/views
@@ -202,31 +98,43 @@ class _MyHomePageState extends State<MyHomePage> {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text(widget.title),
+          title: Text(title),
+          toolbarHeight: kToolbarHeight + 6,
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 15),
-              child: PopupMenuButton<FilterItem>(
-                icon: Icon(Icons.filter_alt),
-                onSelected: (FilterItem item) {
-                  setState(() {});
-                },
-                itemBuilder: (BuildContext context) =>
-                    <PopupMenuEntry<FilterItem>>[
-                  const PopupMenuItem<FilterItem>(
-                    value: FilterItem.all,
-                    child: Text('all chores'),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: PopupMenuButton<FilterItem>(
+                    tooltip: 'Filter chores',
+                    icon: Icon(Icons.filter_alt),
+                    onSelected: (FilterItem item) {
+                      myAppState.setFilter(item);
+                    },
+                    itemBuilder: (BuildContext context) =>
+                        <PopupMenuEntry<FilterItem>>[
+                      const PopupMenuItem<FilterItem>(
+                        value: FilterItem.all,
+                        child: Text('all chores'),
+                      ),
+                      const PopupMenuItem<FilterItem>(
+                        value: FilterItem.done,
+                        child: Text('done'),
+                      ),
+                      const PopupMenuItem<FilterItem>(
+                        value: FilterItem.undone,
+                        child: Text('undone'),
+                      ),
+                    ],
                   ),
-                  const PopupMenuItem<FilterItem>(
-                    value: FilterItem.done,
-                    child: Text('done'),
-                  ),
-                  const PopupMenuItem<FilterItem>(
-                    value: FilterItem.undone,
-                    child: Text('undone'),
-                  ),
-                ],
-              ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Text(
+                      'Current filter: ${myAppState.selectedFilter.name}',
+                      style: TextStyle(fontSize: 10)),
+                ),
+              ],
             ),
           ],
         ),
@@ -253,11 +161,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       label: Text('Add chore'),
                     ),
                   ],
-                  selectedIndex: selectedIndex,
+                  selectedIndex: myAppState.selectedIndex,
                   onDestinationSelected: (value) {
-                    setState(() {
-                      selectedIndex = value;
-                    });
+                    myAppState.setIndex(value);
                   },
                 ),
               ),

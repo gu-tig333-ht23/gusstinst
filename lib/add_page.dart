@@ -1,19 +1,36 @@
 import 'package:flutter/material.dart';
 import 'chore.dart';
+import 'chore_list.dart';
+import 'package:provider/provider.dart';
 
 // View for adding new chores
 class AddPage extends StatelessWidget {
-  final Function(Chore) addChore;
-  // callback for adding new chores
-  AddPage(this.addChore);
-
   // controllers for saving text input when adding new chores
   final TextEditingController _textController = TextEditingController();
-  final TextEditingController _yearController = TextEditingController();
-  final TextEditingController _monthController = TextEditingController();
-  final TextEditingController _dayController = TextEditingController();
-  final TextEditingController _hourController = TextEditingController();
-  final TextEditingController _minuteController = TextEditingController();
+
+  String _selectedYear = '0000'; // default values, empty strings
+  String _selectedMonth = '00'; // will result in chore with "No deadline"
+  String _selectedDay = '00';
+  String _selectedHour = '00';
+  String _selectedMinute = '00';
+
+  final List<String> yearOptions = ['0000', '2023', '2024', '2025', '2026'];
+
+  final List<String> monthOptions = List.generate(12, (index) {
+    return (index).toString().padLeft(2, '0');
+  });
+
+  final List<String> dayOptions = List.generate(32, (index) {
+    return (index).toString().padLeft(2, '0');
+  });
+
+  final List<String> hourOptions = List.generate(24, (index) {
+    return index.toString().padLeft(2, '0');
+  });
+
+  final List<String> minuteOptions = List.generate(60, (index) {
+    return index.toString().padLeft(2, '0');
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +48,25 @@ class AddPage extends StatelessWidget {
           ),
         ),
         Text('Any deadline? (optional)'),
-
+        SizedBox(height: 10),
         // Year, month and day input fields in a row
         Padding(
           padding: const EdgeInsets.only(right: 10, left: 10),
           child: Row(
             children: [
               Expanded(
-                child: TextField(
-                  controller: _yearController,
+                child: DropdownButtonFormField<String>(
+                  value: _selectedYear,
+                  onChanged: (value) {
+                    _selectedYear = value!;
+                  },
+                  items:
+                      yearOptions.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.only(right: 10, left: 10),
@@ -49,8 +76,18 @@ class AddPage extends StatelessWidget {
               ),
               SizedBox(width: 5), // add some space between input fields
               Expanded(
-                child: TextField(
-                  controller: _monthController,
+                child: DropdownButtonFormField<String>(
+                  value: _selectedMonth,
+                  onChanged: (value) {
+                    _selectedMonth = value!;
+                  },
+                  items: monthOptions
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.only(right: 10, left: 10),
@@ -60,8 +97,18 @@ class AddPage extends StatelessWidget {
               ),
               SizedBox(width: 5), // add some space between input fields
               Expanded(
-                child: TextField(
-                  controller: _dayController,
+                child: DropdownButtonFormField<String>(
+                  value: _selectedDay,
+                  onChanged: (value) {
+                    _selectedDay = value!;
+                  },
+                  items:
+                      dayOptions.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.only(right: 10, left: 10),
@@ -72,8 +119,7 @@ class AddPage extends StatelessWidget {
             ],
           ),
         ),
-        Text('Please use format 20YY/MM/DD  HH:MM'),
-
+        SizedBox(height: 4),
         // Hour and minute input fields in a row
         Padding(
           padding:
@@ -81,8 +127,18 @@ class AddPage extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: TextField(
-                  controller: _hourController,
+                child: DropdownButtonFormField<String>(
+                  value: _selectedHour,
+                  onChanged: (value) {
+                    _selectedHour = value!;
+                  },
+                  items:
+                      hourOptions.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.only(right: 10, left: 10),
@@ -92,8 +148,18 @@ class AddPage extends StatelessWidget {
               ),
               SizedBox(width: 5),
               Expanded(
-                child: TextField(
-                  controller: _minuteController,
+                child: DropdownButtonFormField<String>(
+                  value: _selectedMinute,
+                  onChanged: (value) {
+                    _selectedMinute = value!;
+                  },
+                  items: minuteOptions
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.only(right: 10, left: 10),
@@ -111,11 +177,11 @@ class AddPage extends StatelessWidget {
           onPressed: () {
             // Gets the entered chore text from the input field
             String choreText = _textController.text;
-            String choreYear = _yearController.text;
-            String choreMonth = _monthController.text;
-            String choreDay = _dayController.text;
-            String choreHour = _hourController.text;
-            String choreMinute = _minuteController.text;
+            String choreYear = _selectedYear;
+            String choreMonth = _selectedMonth;
+            String choreDay = _selectedDay;
+            String choreHour = _selectedHour;
+            String choreMinute = _selectedMinute;
 
             if (choreText.isNotEmpty) {
               // Creates a new chore object
@@ -129,16 +195,68 @@ class AddPage extends StatelessWidget {
               );
 
               // Adds chore to the chores list
-              addChore(newChore);
+              Provider.of<ChoreList>(context, listen: false).addChore(newChore);
             }
             // Clears the input fields
             _textController.clear();
-            _yearController.clear();
-            _monthController.clear();
-            _dayController.clear();
-            _hourController.clear();
-            _minuteController.clear();
           },
+        ),
+        SizedBox(height: 10),
+
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text('What does the deadline colors mean?'),
+            Padding(
+              padding:
+                  const EdgeInsets.only(top: 8.0, bottom: 2, left: 8, right: 8),
+              child: Container(
+                alignment: Alignment.topLeft,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.green),
+                padding: EdgeInsets.all(4),
+                child: Text('Chill                 >2 days left/No deadline'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 2, left: 8, right: 8.0),
+              child: Container(
+                alignment: Alignment.topLeft,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.yellow),
+                padding: EdgeInsets.all(4),
+                child:
+                    Text('Move on                                <2 days left'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 2, left: 8, right: 8.0),
+              child: Container(
+                alignment: Alignment.topLeft,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.orange),
+                padding: EdgeInsets.all(4),
+                child: Text(
+                    'Hurry                                    <4 hours left'),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 2, left: 8, right: 8.0),
+              child: Container(
+                alignment: Alignment.topLeft,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: const Color.fromARGB(255, 79, 8, 3)),
+                padding: EdgeInsets.all(4),
+                child: Text(
+                    'Late                                deadline passed',
+                    style: TextStyle(color: Colors.white)),
+              ),
+            ),
+          ],
         ),
       ],
     );
