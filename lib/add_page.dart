@@ -4,11 +4,12 @@ import 'chore_list.dart';
 import 'package:provider/provider.dart';
 
 // View for adding new chores
+// ignore: must_be_immutable
 class AddPage extends StatelessWidget {
   // controllers for saving text input when adding new chores
   final TextEditingController _textController = TextEditingController();
 
-  String _selectedYear = '0000'; // default values, empty strings
+  String _selectedYear = '0000'; // default values
   String _selectedMonth = '00'; // will result in chore with "No deadline"
   String _selectedDay = '00';
   String _selectedHour = '00';
