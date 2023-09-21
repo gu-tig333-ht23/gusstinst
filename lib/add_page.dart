@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:template/main.dart';
 import 'chore.dart';
 import 'chore_list.dart';
 import 'package:provider/provider.dart';
@@ -186,20 +187,22 @@ class AddPage extends StatelessWidget {
 
             if (choreText.isNotEmpty) {
               // Creates a new chore object
-              Chore newChore = Chore(
-                choreText,
-                minute: choreMinute,
-                hour: choreHour,
-                day: choreDay,
-                month: choreMonth,
-                year: choreYear,
-              );
+              Chore newChore = Chore(choreText
+                  //minute: choreMinute,
+                  //hour: choreHour,
+                  //day: choreDay,
+                  //month: choreMonth,
+                  //year: choreYear,
+                  );
 
               // Adds chore to the chores list
-              Provider.of<ChoreList>(context, listen: false).addChore(newChore);
+              Provider.of<ChoreList>(context, listen: false)
+                  .addNewChore(newChore);
             }
             // Clears the input fields
             _textController.clear();
+            // Back to "main page" after adding a chore
+            Provider.of<MyAppState>(context, listen: false).setIndex(0);
           },
         ),
         SizedBox(height: 10),

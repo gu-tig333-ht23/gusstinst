@@ -3,18 +3,35 @@ import 'chore.dart';
 
 // handles all changes to the list with chores
 class ChoreList extends ChangeNotifier {
-  final List<Chore> _chores = [];
+  List<Chore> _chores = [];
 
   List<Chore> get chores => _chores;
 
-  // function/method that adds new chores
-  void addChore(Chore chore) {
-    _chores.add(chore);
+  // fetch chores from API
+  void fetchChores() async {
+    var chores = await getChoresFromAPI();
+    _chores = chores;
+    //print('fetching chores, length: ${chores.length}');
+    notifyListeners();
+  }
+
+  // add chores to API
+  void addNewChore(Chore chore) async {
+    await addChoreToAPI(chore);
+    _chores = await getChoresFromAPI();
+    notifyListeners();
+  }
+
+  // delete chores from API
+  void removeChore(Chore chore, int index) async {
+    var choreID = _chores[index].id;
+
+    await deleteChoreFromAPI(choreID!);
     notifyListeners();
   }
 
   // function that deletes chores from the list
-  void deleteChore(BuildContext context, Chore chore) {
+  void deleteChore(BuildContext context, Chore chore, int index) {
     // dialog box checks if user is sure about deleting
     showDialog(
       context: context,
@@ -31,7 +48,7 @@ class ChoreList extends ChangeNotifier {
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                _chores.remove(chore);
+                removeChore(chore, index);
                 notifyListeners();
                 Navigator.of(context).pop();
               },
@@ -48,6 +65,7 @@ class ChoreList extends ChangeNotifier {
     notifyListeners();
   }
 
+  /*
   // function that converts the deadline parameters to DateTime format
   DateTime convertDeadlineToDT(Chore chore) {
     DateTime deadlineAsDT = DateTime(
@@ -89,7 +107,7 @@ class ChoreList extends ChangeNotifier {
     chores.sort(compareChoresByDeadline);
     notifyListeners();
   }
-
+*/
 // function to filter the chores that are done
   List<Chore> filterDoneChores(List<Chore> chores) {
     List<Chore> doneChores = [];
@@ -148,7 +166,9 @@ class ChoreList extends ChangeNotifier {
       },
     );
   }
+}
 
+/*
 // function for editing the deadline in existing chores
   void editChoreDeadline(BuildContext context, Chore chore, String year) {
     TextEditingController deadlineEditController =
@@ -218,3 +238,4 @@ class ChoreList extends ChangeNotifier {
     );
   }
 }
+*/

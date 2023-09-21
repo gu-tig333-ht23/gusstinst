@@ -9,7 +9,12 @@ import 'chore_list.dart';
 class ListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // fetches the chores from API
+    Provider.of<ChoreList>(context).fetchChores();
+
     var chores = context.watch<ChoreList>().chores;
+
+    //print('building listpage, chores length:${chores.length}');
     var currentFilter = context.watch<MyAppState>().selectedFilter;
 
     List<Chore> getFilteredChores() {
@@ -30,7 +35,7 @@ class ListPage extends StatelessWidget {
     // get the current list according to filters
     final filteredChores = getFilteredChores();
     // sorts the chores in the list according to their deadlines
-    Provider.of<ChoreList>(context, listen: false).sortChoresByDeadline();
+    //Provider.of<ChoreList>(context, listen: false).sortChoresByDeadline();
 
     // secures that itemCount isn`t below 0
     final itemCount =
@@ -73,7 +78,7 @@ class ListPage extends StatelessWidget {
             if (choreIndex < filteredChores.length) {
               return Column(
                 children: [
-                  ChoreItem(filteredChores[choreIndex]),
+                  ChoreItem(filteredChores[choreIndex], choreIndex),
                 ],
               );
             }

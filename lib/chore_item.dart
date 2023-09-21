@@ -6,11 +6,13 @@ import 'package:provider/provider.dart';
 // class/widget for viewing the chore items in the list
 class ChoreItem extends StatelessWidget {
   final Chore chore;
+  final int index;
 
-  ChoreItem(this.chore);
+  ChoreItem(this.chore, this.index);
 
   @override
   Widget build(BuildContext context) {
+    /*
     Color getColorForChoreStatus(chore) {
       final now = DateTime.now();
       final choreDeadline = Provider.of<ChoreList>(context, listen: false)
@@ -37,7 +39,7 @@ class ChoreItem extends StatelessWidget {
       } else {
         return Colors.green;
       }
-    }
+    }*/
 
     return Column(
       children: [
@@ -80,17 +82,22 @@ class ChoreItem extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      color: getColorForChoreStatus(chore),
+                      color: Colors.green,
+                      //color: getColorForChoreStatus(chore),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: InkWell(
                         onTap: () {
+                          /*
                           // dialog box to edit the deadline
                           Provider.of<ChoreList>(context, listen: false)
                               .editChoreDeadline(context, chore, chore.year);
+                        */
                         },
                         child: Text(
+                          'No deadline',
+                          /*
                           chore.year == '0000' &&
                                   chore.month == '00' &&
                                   chore.day == '00' &&
@@ -98,11 +105,13 @@ class ChoreItem extends StatelessWidget {
                                   chore.minute == '00'
                               ? 'No deadline'
                               : '${chore.year}/${chore.month}/${chore.day}    ${chore.hour}:${chore.minute}',
-                          style: TextStyle(
-                              color: getColorForChoreStatus(chore) ==
+                          */
+                          style: TextStyle(color: Colors.black
+                              /*color: getColorForChoreStatus(chore) ==
                                       const Color.fromARGB(255, 79, 8, 3)
                                   ? Colors.white
-                                  : Colors.black),
+                                  : Colors.black),*/
+                              ),
                         ),
                       ),
                     ),
@@ -116,7 +125,7 @@ class ChoreItem extends StatelessWidget {
                 tooltip: 'Delete',
                 onPressed: () {
                   Provider.of<ChoreList>(context, listen: false)
-                      .deleteChore(context, chore);
+                      .deleteChore(context, chore, index);
                 },
               ),
             ],
