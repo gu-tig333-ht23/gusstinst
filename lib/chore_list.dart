@@ -11,7 +11,6 @@ class ChoreList extends ChangeNotifier {
   void fetchChores() async {
     var chores = await getChoresFromAPI();
     _chores = chores;
-    //print('fetching chores, length: ${chores.length}');
     notifyListeners();
   }
 
@@ -27,6 +26,13 @@ class ChoreList extends ChangeNotifier {
     var choreID = _chores[index].id;
 
     await deleteChoreFromAPI(choreID!);
+    notifyListeners();
+  }
+
+  // update the chore text in API
+  void editChoreTitle(Chore chore, String newtext, int index) async {
+    var choreID = _chores[index].id; // identificates the chore ID
+    await updateChoreTextInAPI(choreID!, newtext);
     notifyListeners();
   }
 
@@ -131,7 +137,8 @@ class ChoreList extends ChangeNotifier {
   }
 
 // function for editing the chore text in existing chores
-  void editChoreText(BuildContext context, Chore chore, String newtxt) {
+  void editChoreText(
+      BuildContext context, Chore chore, String newtxt, int index) {
     TextEditingController textEditController =
         TextEditingController(text: chore.text); //showing current chore text
 
@@ -155,7 +162,7 @@ class ChoreList extends ChangeNotifier {
               child: Text('Save'),
               onPressed: () {
                 String newText = textEditController.text;
-                chore.text = newText;
+                editChoreTitle(chore, newText, index);
 
                 notifyListeners();
                 Navigator.of(context).pop();

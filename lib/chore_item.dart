@@ -68,7 +68,7 @@ class ChoreItem extends StatelessWidget {
                     onTap: () {
                       // dialog box to edit the text
                       Provider.of<ChoreList>(context, listen: false)
-                          .editChoreText(context, chore, chore.text);
+                          .editChoreText(context, chore, chore.text, index);
                     },
                     child: Text(
                       style: TextStyle(
