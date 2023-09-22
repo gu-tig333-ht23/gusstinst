@@ -64,7 +64,7 @@ Future<List<Chore>> getChoresFromAPI() async {
 
 // add new chore to API
 Future<void> addChoreToAPI(Chore chore) async {
-  http.Response response = await http.post(
+  await http.post(
     Uri.parse('$api/todos?key=$apiKey'),
     headers: {"Content-Type": "application/json"},
     body: jsonEncode(chore.toJson()),
@@ -73,8 +73,7 @@ Future<void> addChoreToAPI(Chore chore) async {
 
 // delete a chore from API by ID
 Future<void> deleteChoreFromAPI(String id) async {
-  http.Response response =
-      await http.delete(Uri.parse('$api/todos/$id?key=$apiKey'));
+  await http.delete(Uri.parse('$api/todos/$id?key=$apiKey'));
 }
 
 // update the chore text in API

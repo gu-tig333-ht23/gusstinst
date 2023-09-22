@@ -78,50 +78,7 @@ class ChoreList extends ChangeNotifier {
     notifyListeners();
   }
 
-  /*
-  // function that converts the deadline parameters to DateTime format
-  DateTime convertDeadlineToDT(Chore chore) {
-    DateTime deadlineAsDT = DateTime(
-      int.tryParse(chore.year) ?? 0,
-      int.tryParse(chore.month) ?? 0,
-      int.tryParse(chore.day) ?? 0,
-      int.tryParse(chore.hour) ?? 0,
-      int.tryParse(chore.minute) ?? 0,
-    );
-    return deadlineAsDT;
-  }
-
-  // function that compares chores based on their deadlines
-  int compareChoresByDeadline(Chore a, Chore b) {
-    // converting the deadline parameters to DateTime format
-    DateTime deadlineA = convertDeadlineToDT(a);
-    DateTime deadlineB = convertDeadlineToDT(b);
-
-    // compares the deadlines
-    // if both chores does not have any deadline
-    if (deadlineA.isAtSameMomentAs(DateTime(0, 0, 0, 0, 0)) &&
-        deadlineB.isAtSameMomentAs(DateTime(0, 0, 0, 0, 0))) {
-      return 0; // same value
-    }
-    // if one of the chores has no deadline, it comes after the other
-    if (deadlineA.isAtSameMomentAs(DateTime(0, 0, 0, 0, 0))) {
-      return 1;
-    } else if (deadlineB.isAtSameMomentAs(DateTime(0, 0, 0, 0, 0))) {
-      return -1;
-    }
-    // compares chores with valid deadlines
-    return deadlineA.compareTo(deadlineB);
-    // returns -1 if A is before B, 0 if A and B is the same
-    // and 1 if B is before A
-  }
-
-  // function to sort the chores list according to deadlines
-  void sortChoresByDeadline() {
-    chores.sort(compareChoresByDeadline);
-    notifyListeners();
-  }
-*/
-// function to filter the chores that are done
+  // function to filter the chores that are done
   List<Chore> filterDoneChores(List<Chore> chores) {
     List<Chore> doneChores = [];
     for (var c = 0; c < chores.length; c++) {
@@ -181,6 +138,51 @@ class ChoreList extends ChangeNotifier {
     );
   }
 }
+
+  /*
+  // function that converts the deadline parameters to DateTime format
+  DateTime convertDeadlineToDT(Chore chore) {
+    DateTime deadlineAsDT = DateTime(
+      int.tryParse(chore.year) ?? 0,
+      int.tryParse(chore.month) ?? 0,
+      int.tryParse(chore.day) ?? 0,
+      int.tryParse(chore.hour) ?? 0,
+      int.tryParse(chore.minute) ?? 0,
+    );
+    return deadlineAsDT;
+  }
+
+  // function that compares chores based on their deadlines
+  int compareChoresByDeadline(Chore a, Chore b) {
+    // converting the deadline parameters to DateTime format
+    DateTime deadlineA = convertDeadlineToDT(a);
+    DateTime deadlineB = convertDeadlineToDT(b);
+
+    // compares the deadlines
+    // if both chores does not have any deadline
+    if (deadlineA.isAtSameMomentAs(DateTime(0, 0, 0, 0, 0)) &&
+        deadlineB.isAtSameMomentAs(DateTime(0, 0, 0, 0, 0))) {
+      return 0; // same value
+    }
+    // if one of the chores has no deadline, it comes after the other
+    if (deadlineA.isAtSameMomentAs(DateTime(0, 0, 0, 0, 0))) {
+      return 1;
+    } else if (deadlineB.isAtSameMomentAs(DateTime(0, 0, 0, 0, 0))) {
+      return -1;
+    }
+    // compares chores with valid deadlines
+    return deadlineA.compareTo(deadlineB);
+    // returns -1 if A is before B, 0 if A and B is the same
+    // and 1 if B is before A
+  }
+
+  // function to sort the chores list according to deadlines
+  void sortChoresByDeadline() {
+    chores.sort(compareChoresByDeadline);
+    notifyListeners();
+  }
+*/
+
 
 /*
 // function for editing the deadline in existing chores

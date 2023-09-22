@@ -4,13 +4,6 @@ import 'help_page.dart';
 import 'list_page.dart';
 import 'package:provider/provider.dart';
 import 'chore_list.dart';
-import 'chore.dart';
-import 'api_fetcher.dart';
-
-// Nätverk
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'dart:convert';
 
 // For the popupButton, filtering chores
 enum FilterItem { all, done, undone }
