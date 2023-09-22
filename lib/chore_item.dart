@@ -55,7 +55,7 @@ class ChoreItem extends StatelessWidget {
                 tooltip: 'Mark as done',
                 onPressed: () {
                   Provider.of<ChoreList>(context, listen: false)
-                      .toggleBox(chore);
+                      .toggleBox(chore, index);
                 },
               ),
               Column(

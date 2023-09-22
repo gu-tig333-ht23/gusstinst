@@ -32,7 +32,13 @@ class ChoreList extends ChangeNotifier {
   // update the chore text in API
   void editChoreTitle(Chore chore, String newtext, int index) async {
     var choreID = _chores[index].id; // identificates the chore ID
-    await updateChoreTextInAPI(choreID!, newtext);
+    await updateChoreTextInAPI(choreID!, chore, newtext);
+    notifyListeners();
+  }
+
+  void changeChoreStatus(Chore chore, int index) async {
+    var choreID = _chores[index].id; // identificates the chore ID
+    await updateAPIStatus(choreID!, chore);
     notifyListeners();
   }
 
@@ -66,8 +72,9 @@ class ChoreList extends ChangeNotifier {
   }
 
   // function that changes the chore`s icon when clicked
-  void toggleBox(Chore chore) {
+  void toggleBox(Chore chore, int index) {
     chore.isDone = !chore.isDone;
+    changeChoreStatus(chore, index);
     notifyListeners();
   }
 

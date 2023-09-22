@@ -78,9 +78,12 @@ Future<void> deleteChoreFromAPI(String id) async {
 }
 
 // update the chore text in API
-Future<void> updateChoreTextInAPI(String id, String newText) async {
-  Chore editedChore =
-      Chore(newText); // creates a new chore with the changed text
+Future<void> updateChoreTextInAPI(
+    String id, Chore chore, String newText) async {
+  bool status = chore.isDone;
+  Chore editedChore = Chore(newText,
+      isDone:
+          status); // creates a new chore with the changed text and same status
   await http.put(Uri.parse('$api/todos/$id?key=$apiKey'),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(editedChore
@@ -88,4 +91,12 @@ Future<void> updateChoreTextInAPI(String id, String newText) async {
 }
 
 // update chore status in API
-Future<void> updateAPIStatus(String id) async {}
+Future<void> updateAPIStatus(String id, Chore chore) async {
+  bool status = chore
+      .isDone; // retrieves the chores actual status true/false after toggling
+  Chore updatedChore = Chore(chore.text, isDone: status);
+  await http.put(Uri.parse('$api/todos/$id?key=$apiKey'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(updatedChore
+          .toJson())); // put the new chore in, replacing the old one with same ID
+}
