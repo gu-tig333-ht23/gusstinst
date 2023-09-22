@@ -13,8 +13,6 @@ class ListPage extends StatelessWidget {
     Provider.of<ChoreList>(context).fetchChores();
 
     var chores = context.watch<ChoreList>().chores;
-
-    //print('building listpage, chores length:${chores.length}');
     var currentFilter = context.watch<MyAppState>().selectedFilter;
 
     List<Chore> getFilteredChores() {
