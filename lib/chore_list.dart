@@ -78,29 +78,6 @@ class ChoreList extends ChangeNotifier {
     notifyListeners();
   }
 
-/*
-  // function to filter the chores that are done
-  List<Chore> filterDoneChores(List<Chore> chores) {
-    List<Chore> doneChores = [];
-    for (var c = 0; c < chores.length; c++) {
-      if (chores[c].isDone) {
-        doneChores.add(chores[c]);
-      }
-    }
-    return doneChores;
-  }
-
-// function to filter the undone chores
-  List<Chore> filterUndoneChores(List<Chore> chores) {
-    List<Chore> undoneChores = [];
-    for (var c = 0; c < chores.length; c++) {
-      if (!chores[c].isDone) {
-        undoneChores.add(chores[c]);
-      }
-    }
-    return undoneChores;
-  }
-*/
 // function for editing the chore text in existing chores
   void editChoreText(
       BuildContext context, Chore chore, String newtxt, int index) {

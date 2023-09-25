@@ -129,7 +129,7 @@ class MyHomePage extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.only(right: 10.0),
                   child: Text(
                       'Current filter: ${myAppState.selectedFilter.name}',
                       style: TextStyle(fontSize: 10)),

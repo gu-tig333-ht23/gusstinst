@@ -21,12 +21,8 @@ class ListPage extends StatelessWidget {
           return chores;
         case FilterItem.done:
           return chores.where((chore) => chore.isDone == true).toList();
-        //return Provider.of<ChoreList>(context, listen: false)
-        //   .filterDoneChores(chores);
         case FilterItem.undone:
           return chores.where((chore) => chore.isDone == false).toList();
-        //return Provider.of<ChoreList>(context, listen: false)
-        //    .filterUndoneChores(chores);
         default:
           return chores;
       }
@@ -76,11 +72,7 @@ class ListPage extends StatelessWidget {
           final choreIndex = index ~/ 2;
           if (index.isEven) {
             if (choreIndex < filteredChores.length) {
-              return Column(
-                children: [
-                  ChoreItem(filteredChores[choreIndex], choreIndex),
-                ],
-              );
+              return ChoreItem(filteredChores[choreIndex], choreIndex);
             }
           }
           return Divider(); // Display a Divider for odd indices
