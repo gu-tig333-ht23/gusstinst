@@ -103,8 +103,8 @@ class MyHomePage extends StatelessWidget {
           actions: [
             Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 15),
+                Expanded(
+                  //padding: const EdgeInsets.only(right: 15),
                   child: PopupMenuButton<FilterItem>(
                     tooltip: 'Filter chores',
                     icon: Icon(Icons.filter_alt),
