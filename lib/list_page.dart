@@ -20,11 +20,13 @@ class ListPage extends StatelessWidget {
         case FilterItem.all:
           return chores;
         case FilterItem.done:
-          return Provider.of<ChoreList>(context, listen: false)
-              .filterDoneChores(chores);
+          return chores.where((chore) => chore.isDone == true).toList();
+        //return Provider.of<ChoreList>(context, listen: false)
+        //   .filterDoneChores(chores);
         case FilterItem.undone:
-          return Provider.of<ChoreList>(context, listen: false)
-              .filterUndoneChores(chores);
+          return chores.where((chore) => chore.isDone == false).toList();
+        //return Provider.of<ChoreList>(context, listen: false)
+        //    .filterUndoneChores(chores);
         default:
           return chores;
       }

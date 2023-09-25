@@ -78,6 +78,7 @@ class ChoreList extends ChangeNotifier {
     notifyListeners();
   }
 
+/*
   // function to filter the chores that are done
   List<Chore> filterDoneChores(List<Chore> chores) {
     List<Chore> doneChores = [];
@@ -99,7 +100,7 @@ class ChoreList extends ChangeNotifier {
     }
     return undoneChores;
   }
-
+*/
 // function for editing the chore text in existing chores
   void editChoreText(
       BuildContext context, Chore chore, String newtxt, int index) {
