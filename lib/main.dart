@@ -8,7 +8,12 @@ import 'chore_list.dart';
 // For the popupButton, filtering chores
 enum FilterItem { all, done, undone }
 
-void main() {
+void main() async {
+  print('Fetching chores..');
+  var choreList = ChoreList();
+  await choreList.fetchChores();
+  print('Chores fetched');
+
   runApp(
     MultiProvider(
       providers: [
@@ -17,7 +22,7 @@ void main() {
               MyAppState(), // tracks the selected filter and the page index
         ),
         ChangeNotifierProvider(
-          create: (context) => ChoreList(), // tracks the list with chores
+          create: (context) => choreList, // tracks the list with chores
         ),
       ],
       child: const MyApp(),

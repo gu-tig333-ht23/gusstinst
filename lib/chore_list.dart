@@ -8,7 +8,7 @@ class ChoreList extends ChangeNotifier {
   List<Chore> get chores => _chores;
 
   // fetch chores from API
-  void fetchChores() async {
+  Future<void> fetchChores() async {
     var chores = await getChoresFromAPI();
     _chores = chores;
     notifyListeners();
