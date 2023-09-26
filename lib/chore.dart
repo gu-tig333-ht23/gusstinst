@@ -108,3 +108,27 @@ Future<void> updateAPIStatus(String id, Chore chore) async {
       body: jsonEncode(updatedChore
           .toJson())); // put the new chore in, replacing the old one with same ID
 }
+
+// update chore deadline in API
+Future<void> updateAPIDeadline(String id, Chore chore) async {
+  String text = chore.text;
+  bool status = chore.isDone; // retrieving current chore parameters
+  String m = chore.minute;
+  String h = chore.hour;
+  String d = chore.day;
+  String mo = chore.month;
+  String y = chore.year;
+
+  Chore editedDeadlineChore = Chore(text,
+      minute: m,
+      hour: h,
+      day: d,
+      month: mo,
+      year: y,
+      isDone:
+          status); // creates a new chore with the changed deadline and the other parameters stays the same
+  await http.put(Uri.parse('$api/todos/$id?key=$apiKey'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(editedDeadlineChore
+          .toJson())); // put the new chore in, replacing the old one with same ID
+}

@@ -221,7 +221,8 @@ class AddPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                     color: Colors.green),
                 padding: EdgeInsets.all(4),
-                child: Text('Chill                 >2 days left/No deadline'),
+                child: Text(
+                    'Chill                          >2 days left/No deadline'),
               ),
             ),
             Padding(
@@ -232,8 +233,8 @@ class AddPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                     color: Colors.yellow),
                 padding: EdgeInsets.all(4),
-                child:
-                    Text('Move on                                <2 days left'),
+                child: Text(
+                    'Move on                                         <2 days left'),
               ),
             ),
             Padding(
@@ -245,7 +246,7 @@ class AddPage extends StatelessWidget {
                     color: Colors.orange),
                 padding: EdgeInsets.all(4),
                 child: Text(
-                    'Hurry                                    <4 hours left'),
+                    'Hurry                                            <4 hours left'),
               ),
             ),
             Padding(
@@ -257,7 +258,7 @@ class AddPage extends StatelessWidget {
                     color: const Color.fromARGB(255, 79, 8, 3)),
                 padding: EdgeInsets.all(4),
                 child: Text(
-                    'Late                                deadline passed',
+                    'Late                                        deadline passed',
                     style: TextStyle(color: Colors.white)),
               ),
             ),

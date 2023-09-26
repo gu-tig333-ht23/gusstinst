@@ -7,7 +7,7 @@ class ChoreList extends ChangeNotifier {
 
   List<Chore> get chores => _chores;
 
-  // fetch chores from API
+  // fetch chores from API and sorts them
   Future<void> fetchChores() async {
     var chores = await getChoresFromAPI();
     _chores = chores;
@@ -18,24 +18,30 @@ class ChoreList extends ChangeNotifier {
   // add chores to API
   Future<void> addNewChore(Chore chore) async {
     await addChoreToAPI(chore);
-    await fetchChores();
-    //notifyListeners();
+    await fetchChores(); // retrieves new, sorted list with the newly added chore
   }
 
   // delete chores from API
   void removeChore(Chore chore, int index) async {
     var choreID = _chores[index].id;
     await deleteChoreFromAPI(choreID!);
-    _chores = await getChoresFromAPI();
-    notifyListeners();
+    await fetchChores();
+    //notifyListeners();
   }
 
   // update the chore text in API
   void editChoreTitle(Chore chore, String newtext, int index) async {
     var choreID = _chores[index].id; // identificates the chore ID
     await updateChoreTextInAPI(choreID!, chore, newtext);
-    _chores = await getChoresFromAPI();
-    notifyListeners();
+    await fetchChores();
+    //notifyListeners();
+  }
+
+  // update the chore deadline
+  void editChoreDeadline(Chore chore, int index) async {
+    var choreID = _chores[index].id; // identificates the chore ID
+    await updateAPIDeadline(choreID!, chore);
+    await fetchChores();
   }
 
   void changeChoreStatus(Chore chore, int index) async {
@@ -81,8 +87,7 @@ class ChoreList extends ChangeNotifier {
   }
 
 // function for editing the chore text in existing chores
-  void editChoreText(
-      BuildContext context, Chore chore, String newtxt, int index) {
+  void editChoreText(BuildContext context, Chore chore, int index) {
     TextEditingController textEditController =
         TextEditingController(text: chore.text); //showing current chore text
 
@@ -159,11 +164,9 @@ class ChoreList extends ChangeNotifier {
     _chores.sort(compareChoresByDeadline);
     notifyListeners();
   }
-}
 
-/*
 // function for editing the deadline in existing chores
-  void editChoreDeadline(BuildContext context, Chore chore, String year) {
+  void editChoreDeadlineDialog(BuildContext context, Chore chore, int index) {
     TextEditingController deadlineEditController =
         //showing current deadline
         TextEditingController(
@@ -207,6 +210,7 @@ class ChoreList extends ChangeNotifier {
                 chore.hour = newHour;
                 chore.minute = newMinute;
 
+                editChoreDeadline(chore, index);
                 notifyListeners();
                 Navigator.of(context).pop();
               },
@@ -215,11 +219,13 @@ class ChoreList extends ChangeNotifier {
               child: Text(
                   'No deadline'), // will empty the strings, builds the chore item with 'No deadline'
               onPressed: () {
-                chore.year = '';
-                chore.month = '';
-                chore.day = '';
-                chore.hour = '';
-                chore.minute = '';
+                chore.year = '0000';
+                chore.month = '00';
+                chore.day = '00';
+                chore.hour = '00';
+                chore.minute = '00';
+
+                editChoreDeadline(chore, index);
 
                 notifyListeners();
                 Navigator.of(context).pop();
@@ -231,4 +237,3 @@ class ChoreList extends ChangeNotifier {
     );
   }
 }
-*/

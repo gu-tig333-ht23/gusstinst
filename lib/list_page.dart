@@ -27,8 +27,6 @@ class ListPage extends StatelessWidget {
 
     // get the current list according to filters
     final filteredChores = getFilteredChores();
-    // sorts the chores in the list according to their deadlines
-    //Provider.of<ChoreList>(context, listen: false).sortChoresByDeadline();
 
     // secures that itemCount isn`t below 0
     final itemCount =

@@ -63,7 +63,7 @@ class ChoreItem extends StatelessWidget {
                 onTap: () {
                   // dialog box to edit the text
                   Provider.of<ChoreList>(context, listen: false)
-                      .editChoreText(context, chore, chore.text, index);
+                      .editChoreText(context, chore, index);
                 },
                 child: Text(
                   style: TextStyle(
@@ -84,11 +84,9 @@ class ChoreItem extends StatelessWidget {
                   padding: const EdgeInsets.all(4.0),
                   child: InkWell(
                     onTap: () {
-                      /*
                       // dialog box to edit the deadline
                       Provider.of<ChoreList>(context, listen: false)
-                          .editChoreDeadline(context, chore, chore.year);
-                    */
+                          .editChoreDeadlineDialog(context, chore, index);
                     },
                     child: Text(
                       chore.year == '0000' &&
