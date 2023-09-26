@@ -11,41 +11,43 @@ class Chore {
   String? id;
   String text;
 
-  String minute;
-  String hour;
-  String day;
-  String month;
   String year;
+  String month;
+  String day;
+  String hour;
+  String minute;
 
   bool isDone;
 
-  // empty strings as default if no user input when adding new chores
+  // zeroes in strings as default deadline if no user input when adding new chores
   Chore(this.text,
-      {this.minute = '00',
-      this.hour = '00',
-      this.day = '00',
-      this.month = '00',
+      {this.id,
       this.year = '0000',
-      this.id,
+      this.month = '00',
+      this.day = '00',
+      this.hour = '00',
+      this.minute = '00',
       this.isDone = false}); // the chore is undone by default when created
 
   // converting json to Chore objects
   factory Chore.fromJson(Map<String, dynamic> json) {
     final parts = json['title'].split('/');
 
-    return Chore(parts[0],
-        id: json['id'],
-        isDone: json['done'],
-        minute: parts[1],
-        hour: parts[2],
-        day: parts[3],
-        month: parts[4],
-        year: parts[5]);
+    return Chore(
+      parts[0],
+      id: json['id'], // chore text
+      year: parts[1],
+      month: parts[2],
+      day: parts[3],
+      hour: parts[4],
+      minute: parts[5],
+      isDone: json['done'],
+    );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "title": '$text/$minute/$hour/$day/$month/$year',
+      "title": '$text/$year/$month/$day/$hour/$minute',
       "done": isDone,
     };
   }
@@ -78,18 +80,18 @@ Future<void> deleteChoreFromAPI(String id) async {
 Future<void> updateChoreTextInAPI(
     String id, Chore chore, String newText) async {
   bool status = chore.isDone; // retrieving current chore parameters
-  String m = chore.minute;
-  String h = chore.hour;
-  String d = chore.day;
-  String mo = chore.month;
   String y = chore.year;
+  String mo = chore.month;
+  String d = chore.day;
+  String h = chore.hour;
+  String m = chore.minute;
 
   Chore editedChore = Chore(newText,
-      minute: m,
-      hour: h,
-      day: d,
-      month: mo,
       year: y,
+      month: mo,
+      day: d,
+      hour: h,
+      minute: m,
       isDone:
           status); // creates a new chore with the changed text and same status and other parameters stays the same
   await http.put(Uri.parse('$api/todos/$id?key=$apiKey'),

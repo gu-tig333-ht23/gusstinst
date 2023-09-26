@@ -226,7 +226,6 @@ class ChoreList extends ChangeNotifier {
                 chore.minute = '00';
 
                 editChoreDeadline(chore, index);
-
                 notifyListeners();
                 Navigator.of(context).pop();
               },
