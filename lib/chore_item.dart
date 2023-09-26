@@ -41,7 +41,6 @@ class ChoreItem extends StatelessWidget {
     }
 
     return Row(
-      // overflow problemet ligger i Row widgeten??
       mainAxisSize: MainAxisSize.min,
       children: [
         IconButton(
@@ -79,7 +78,6 @@ class ChoreItem extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  //color: Colors.green,
                   color: getColorForChoreStatus(chore),
                 ),
                 child: Padding(

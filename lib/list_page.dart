@@ -9,9 +9,6 @@ import 'chore_list.dart';
 class ListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // fetches the chores from API
-    //Provider.of<ChoreList>(context).fetchChores();
-
     var chores = context.watch<ChoreList>().chores;
     var currentFilter = context.watch<MyAppState>().selectedFilter;
 

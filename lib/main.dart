@@ -5,9 +5,6 @@ import 'list_page.dart';
 import 'package:provider/provider.dart';
 import 'chore_list.dart';
 
-// For the popupButton, filtering chores
-enum FilterItem { all, done, undone }
-
 void main() async {
   print('Fetching chores..');
   var choreList = ChoreList();
@@ -29,6 +26,9 @@ void main() async {
     ),
   );
 }
+
+// For the popupButton, filtering chores
+enum FilterItem { all, done, undone }
 
 class MyAppState extends ChangeNotifier {
   var selectedIndex = 0;
@@ -109,7 +109,6 @@ class MyHomePage extends StatelessWidget {
             Column(
               children: [
                 Expanded(
-                  //padding: const EdgeInsets.only(right: 15),
                   child: PopupMenuButton<FilterItem>(
                     tooltip: 'Filter chores',
                     icon: Icon(Icons.filter_alt),

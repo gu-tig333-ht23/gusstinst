@@ -77,10 +77,21 @@ Future<void> deleteChoreFromAPI(String id) async {
 // update the chore text in API
 Future<void> updateChoreTextInAPI(
     String id, Chore chore, String newText) async {
-  bool status = chore.isDone;
+  bool status = chore.isDone; // retrieving current chore parameters
+  String m = chore.minute;
+  String h = chore.hour;
+  String d = chore.day;
+  String mo = chore.month;
+  String y = chore.year;
+
   Chore editedChore = Chore(newText,
+      minute: m,
+      hour: h,
+      day: d,
+      month: mo,
+      year: y,
       isDone:
-          status); // creates a new chore with the changed text and same status
+          status); // creates a new chore with the changed text and same status and other parameters stays the same
   await http.put(Uri.parse('$api/todos/$id?key=$apiKey'),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(editedChore

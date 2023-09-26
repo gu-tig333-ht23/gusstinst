@@ -11,21 +11,22 @@ class ChoreList extends ChangeNotifier {
   Future<void> fetchChores() async {
     var chores = await getChoresFromAPI();
     _chores = chores;
+    sortChoresByDeadline(); //sorts the chores by deadline
     notifyListeners();
   }
 
   // add chores to API
-  void addNewChore(Chore chore) async {
+  Future<void> addNewChore(Chore chore) async {
     await addChoreToAPI(chore);
-    _chores = await getChoresFromAPI();
-    notifyListeners();
+    await fetchChores();
+    //notifyListeners();
   }
 
   // delete chores from API
   void removeChore(Chore chore, int index) async {
     var choreID = _chores[index].id;
-
     await deleteChoreFromAPI(choreID!);
+    _chores = await getChoresFromAPI();
     notifyListeners();
   }
 
@@ -33,6 +34,7 @@ class ChoreList extends ChangeNotifier {
   void editChoreTitle(Chore chore, String newtext, int index) async {
     var choreID = _chores[index].id; // identificates the chore ID
     await updateChoreTextInAPI(choreID!, chore, newtext);
+    _chores = await getChoresFromAPI();
     notifyListeners();
   }
 
