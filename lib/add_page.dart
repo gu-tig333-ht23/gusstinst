@@ -18,7 +18,7 @@ class AddPage extends StatelessWidget {
 
   final List<String> yearOptions = ['0000', '2023', '2024', '2025', '2026'];
 
-  final List<String> monthOptions = List.generate(12, (index) {
+  final List<String> monthOptions = List.generate(13, (index) {
     return (index).toString().padLeft(2, '0');
   });
 
@@ -187,13 +187,14 @@ class AddPage extends StatelessWidget {
 
             if (choreText.isNotEmpty) {
               // Creates a new chore object
-              Chore newChore = Chore(choreText
-                  //minute: choreMinute,
-                  //hour: choreHour,
-                  //day: choreDay,
-                  //month: choreMonth,
-                  //year: choreYear,
-                  );
+              Chore newChore = Chore(
+                choreText,
+                minute: choreMinute,
+                hour: choreHour,
+                day: choreDay,
+                month: choreMonth,
+                year: choreYear,
+              );
 
               // Adds chore to the chores list
               Provider.of<ChoreList>(context, listen: false)

@@ -115,9 +115,7 @@ class ChoreList extends ChangeNotifier {
       },
     );
   }
-}
 
-  /*
   // function that converts the deadline parameters to DateTime format
   DateTime convertDeadlineToDT(Chore chore) {
     DateTime deadlineAsDT = DateTime(
@@ -156,11 +154,10 @@ class ChoreList extends ChangeNotifier {
 
   // function to sort the chores list according to deadlines
   void sortChoresByDeadline() {
-    chores.sort(compareChoresByDeadline);
+    _chores.sort(compareChoresByDeadline);
     notifyListeners();
   }
-*/
-
+}
 
 /*
 // function for editing the deadline in existing chores

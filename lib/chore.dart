@@ -11,44 +11,42 @@ class Chore {
   String? id;
   String text;
 
-  //String minute;
-  //String hour;
-  //String day;
-  //String month;
-  //String year;
+  String minute;
+  String hour;
+  String day;
+  String month;
+  String year;
 
   bool isDone;
 
   // empty strings as default if no user input when adding new chores
   Chore(this.text,
-      /*{this.minute = '',
-      this.hour = '',
-      this.day = '',
-      this.month = '',
-      this.year = '',*/
-      {this.id,
+      {this.minute = '00',
+      this.hour = '00',
+      this.day = '00',
+      this.month = '00',
+      this.year = '0000',
+      this.id,
       this.isDone = false}); // the chore is undone by default when created
 
   // converting json to Chore objects
   factory Chore.fromJson(Map<String, dynamic> json) {
-    return Chore(json['title'], id: json['id'], isDone: json['done']
-        //minute: json['minute'],
-        //hour: json['hour'],
-        //day: json['day'],
-        //month: json['month'],
-        //year: json['year'],
-        );
+    final parts = json['title'].split('/');
+
+    return Chore(parts[0],
+        id: json['id'],
+        isDone: json['done'],
+        minute: parts[1],
+        hour: parts[2],
+        day: parts[3],
+        month: parts[4],
+        year: parts[5]);
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "title": text,
+      "title": '$text/$minute/$hour/$day/$month/$year',
       "done": isDone,
-      //"minute": minute,
-      //"hour": hour,
-      //"day": day,
-      //"month": month,
-      //"year": year,
     };
   }
 }

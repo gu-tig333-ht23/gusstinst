@@ -12,7 +12,6 @@ class ChoreItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /*
     Color getColorForChoreStatus(chore) {
       final now = DateTime.now();
       final choreDeadline = Provider.of<ChoreList>(context, listen: false)
@@ -39,7 +38,7 @@ class ChoreItem extends StatelessWidget {
       } else {
         return Colors.green;
       }
-    }*/
+    }
 
     return Row(
       // overflow problemet ligger i Row widgeten??
@@ -80,8 +79,8 @@ class ChoreItem extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: Colors.green,
-                  //color: getColorForChoreStatus(chore),
+                  //color: Colors.green,
+                  color: getColorForChoreStatus(chore),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
@@ -94,8 +93,6 @@ class ChoreItem extends StatelessWidget {
                     */
                     },
                     child: Text(
-                      'No deadline',
-                      /*
                       chore.year == '0000' &&
                               chore.month == '00' &&
                               chore.day == '00' &&
@@ -103,13 +100,11 @@ class ChoreItem extends StatelessWidget {
                               chore.minute == '00'
                           ? 'No deadline'
                           : '${chore.year}/${chore.month}/${chore.day}    ${chore.hour}:${chore.minute}',
-                      */
-                      style: TextStyle(color: Colors.black
-                          /*color: getColorForChoreStatus(chore) ==
+                      style: TextStyle(
+                          color: getColorForChoreStatus(chore) ==
                                   const Color.fromARGB(255, 79, 8, 3)
                               ? Colors.white
-                              : Colors.black),*/
-                          ),
+                              : Colors.black),
                     ),
                   ),
                 ),
@@ -117,8 +112,6 @@ class ChoreItem extends StatelessWidget {
             ],
           ),
         ),
-
-        //Spacer(), // to push the delete button to rightmost end of the row
         IconButton(
           icon: Icon(Icons.delete),
           tooltip: 'Delete',
