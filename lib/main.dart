@@ -4,8 +4,10 @@ import 'chore_list.dart';
 import 'home_page.dart';
 
 void main() async {
+  print('Fetching chores..');
   var choreList = ChoreList();
   await choreList.fetchChores();
+  print('Chores fetched!');
 
   runApp(
     MultiProvider(

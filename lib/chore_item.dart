@@ -95,7 +95,7 @@ class ChoreItem extends StatelessWidget {
                               chore.hour == '00' &&
                               chore.minute == '00'
                           ? 'No deadline'
-                          : '${chore.year}/${chore.month}/${chore.day}    ${chore.hour}:${chore.minute}',
+                          : '${chore.day}/${chore.month}/${chore.year}    ${chore.hour}:${chore.minute}',
                       style: TextStyle(
                           color: getColorForChoreStatus(chore) ==
                                   const Color.fromARGB(255, 79, 8, 3)

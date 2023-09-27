@@ -27,7 +27,6 @@ class ChoreList extends ChangeNotifier {
     var choreID = _chores[index].id;
     await deleteChoreFromAPI(choreID!);
     await fetchChores();
-    //notifyListeners();
   }
 
   // update the chore text in API
@@ -35,7 +34,6 @@ class ChoreList extends ChangeNotifier {
     var choreID = _chores[index].id; // identificates the chore ID
     await updateChoreTextInAPI(choreID!, chore, newtext);
     await fetchChores();
-    //notifyListeners();
   }
 
   // update the chore deadline
