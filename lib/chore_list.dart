@@ -166,20 +166,71 @@ class ChoreList extends ChangeNotifier {
 
 // function for editing the deadline in existing chores
   void editChoreDeadlineDialog(BuildContext context, Chore chore, int index) {
-    TextEditingController deadlineEditController =
-        //showing current deadline
-        TextEditingController(
-            text:
-                '${chore.year}/${chore.month}/${chore.day}    ${chore.hour}:${chore.minute}');
+    TextEditingController dateController = TextEditingController(
+        text: '${chore.day}/${chore.month}/${chore.year}'); // current date
+    TextEditingController timeController = TextEditingController(
+        text: '${chore.hour}:${chore.minute}'); // current time
+
+    // function to show date picker
+    Future<void> selectDate() async {
+      final selectedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime.now(),
+        lastDate: DateTime(DateTime.now().year + 5),
+      );
+      if (selectedDate != null) {
+        dateController.text =
+            '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}';
+      }
+    }
+
+    // function to show time picker
+    Future<void> selectTime() async {
+      final selectedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay(
+          hour: int.parse(chore.hour),
+          minute: int.parse(chore.minute),
+        ),
+      );
+      if (selectedTime != null) {
+        timeController.text =
+            '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}';
+      }
+    }
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Edit chore deadline'),
-          content: TextField(
-            controller: deadlineEditController,
-            decoration:
-                InputDecoration(labelText: 'Format YYYY/MM/DD    HH:MM'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              InkWell(
+                onTap: () => selectDate(),
+                child: IgnorePointer(
+                  child: TextField(
+                    controller: dateController,
+                    decoration: InputDecoration(
+                      labelText: 'Select Date',
+                    ),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () => selectTime(),
+                child: IgnorePointer(
+                  child: TextField(
+                    controller: timeController,
+                    decoration: InputDecoration(
+                      labelText: 'Select Time',
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
           actions: <Widget>[
             TextButton(
@@ -191,16 +242,16 @@ class ChoreList extends ChangeNotifier {
             TextButton(
               child: Text('Save'),
               onPressed: () {
-                // saving new parameters as substrings of input
-                String newYear = deadlineEditController.text.substring(0, 4);
-                String newMonth = deadlineEditController.text.substring(5, 7);
-                String newDay = deadlineEditController.text.substring(8, 10);
-                String newHour = deadlineEditController.text.substring(
-                    deadlineEditController.text.length - 5,
-                    deadlineEditController.text.length - 3);
-                String newMinute = deadlineEditController.text.substring(
-                    deadlineEditController.text.length - 2,
-                    deadlineEditController.text.length);
+                // retrieving date and time parameters from the text controllers
+                final dateParts = dateController.text.split('/');
+                final timeParts = timeController.text.split(':');
+
+                String newDay = dateParts[0];
+                String newMonth = dateParts[1];
+                String newYear = dateParts[2];
+
+                String newHour = timeParts[0];
+                String newMinute = timeParts[1];
 
                 // updates chore parameters
                 chore.year = newYear;
