@@ -89,7 +89,8 @@ class MyHomePage extends StatelessWidget {
                   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                   extended: constraints.maxWidth >= 600,
                   trailing: IconButton(
-                    icon: Icon(Icons.color_lens_outlined),
+                    icon: Icon(Icons.help),
+                    tooltip: 'Color legend',
                     onPressed: () {
                       // pop up window with color legend
                       showDialog(
