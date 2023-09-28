@@ -6,8 +6,9 @@ import 'package:provider/provider.dart';
 // class/widget for viewing the chore items in the list
 class ChoreItem extends StatelessWidget {
   final Chore chore;
+  final int index;
 
-  ChoreItem(this.chore);
+  ChoreItem(this.chore, this.index);
 
   @override
   Widget build(BuildContext context) {
@@ -39,88 +40,84 @@ class ChoreItem extends StatelessWidget {
       }
     }
 
-    return Column(
+    return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Padding(
-          padding: EdgeInsets.all(3),
-          child: Row(
+        IconButton(
+          icon: Icon(chore.isDone
+              ? Icons.check_box
+              : Icons.check_box_outline_blank_outlined),
+          tooltip: 'Mark as done',
+          onPressed: () {
+            Provider.of<ChoreList>(context, listen: false)
+                .toggleBox(chore, index);
+          },
+        ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              IconButton(
-                icon: Icon(chore.isDone
-                    ? Icons.check_box
-                    : Icons.check_box_outline_blank_outlined),
-                tooltip: 'Mark as done',
-                onPressed: () {
+              InkWell(
+                // the chore text
+                onTap: () {
+                  // dialog box to edit the text
                   Provider.of<ChoreList>(context, listen: false)
-                      .toggleBox(chore);
+                      .editChoreText(context, chore, index);
                 },
+                child: Text(
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      decoration: chore.isDone
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none),
+                  overflow: TextOverflow.clip,
+                  chore.text,
+                  textScaleFactor: 1.2,
+                ),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  InkWell(
-                    // the chore text
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: getColorForChoreStatus(chore),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: InkWell(
                     onTap: () {
-                      // dialog box to edit the text
+                      // dialog box to edit the deadline
                       Provider.of<ChoreList>(context, listen: false)
-                          .editChoreText(context, chore, chore.text);
+                          .editChoreDeadlineDialog(context, chore, index);
                     },
                     child: Text(
+                      chore.year == '0000' &&
+                              chore.month == '00' &&
+                              chore.day == '00' &&
+                              chore.hour == '00' &&
+                              chore.minute == '00'
+                          ? 'No deadline'
+                          : '${chore.day}/${chore.month}/${chore.year}    ${chore.hour}:${chore.minute}',
                       style: TextStyle(
-                          decoration: chore.isDone
-                              ? TextDecoration.lineThrough
-                              : TextDecoration.none),
-                      chore.text,
-                      textScaleFactor: 1.2,
+                          fontSize: 14,
+                          color: getColorForChoreStatus(chore) ==
+                                  const Color.fromARGB(255, 79, 8, 3)
+                              ? Colors.white
+                              : Colors.black),
                     ),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: getColorForChoreStatus(chore),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: InkWell(
-                        onTap: () {
-                          // dialog box to edit the deadline
-                          Provider.of<ChoreList>(context, listen: false)
-                              .editChoreDeadline(context, chore, chore.year);
-                        },
-                        child: Text(
-                          chore.year == '0000' &&
-                                  chore.month == '00' &&
-                                  chore.day == '00' &&
-                                  chore.hour == '00' &&
-                                  chore.minute == '00'
-                              ? 'No deadline'
-                              : '${chore.year}/${chore.month}/${chore.day}    ${chore.hour}:${chore.minute}',
-                          style: TextStyle(
-                              color: getColorForChoreStatus(chore) ==
-                                      const Color.fromARGB(255, 79, 8, 3)
-                                  ? Colors.white
-                                  : Colors.black),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              Spacer(), // to push the delete button to rightmost end of the row
-              IconButton(
-                icon: Icon(Icons.delete),
-                tooltip: 'Delete',
-                onPressed: () {
-                  Provider.of<ChoreList>(context, listen: false)
-                      .deleteChore(context, chore);
-                },
+                ),
               ),
             ],
           ),
+        ),
+        IconButton(
+          icon: Icon(Icons.delete),
+          tooltip: 'Delete',
+          onPressed: () {
+            Provider.of<ChoreList>(context, listen: false)
+                .deleteChore(context, chore, index);
+          },
         ),
       ],
     );

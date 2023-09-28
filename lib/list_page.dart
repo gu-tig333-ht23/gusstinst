@@ -17,11 +17,9 @@ class ListPage extends StatelessWidget {
         case FilterItem.all:
           return chores;
         case FilterItem.done:
-          return Provider.of<ChoreList>(context, listen: false)
-              .filterDoneChores(chores);
+          return chores.where((chore) => chore.isDone == true).toList();
         case FilterItem.undone:
-          return Provider.of<ChoreList>(context, listen: false)
-              .filterUndoneChores(chores);
+          return chores.where((chore) => chore.isDone == false).toList();
         default:
           return chores;
       }
@@ -29,8 +27,6 @@ class ListPage extends StatelessWidget {
 
     // get the current list according to filters
     final filteredChores = getFilteredChores();
-    // sorts the chores in the list according to their deadlines
-    Provider.of<ChoreList>(context, listen: false).sortChoresByDeadline();
 
     // secures that itemCount isn`t below 0
     final itemCount =
@@ -71,11 +67,7 @@ class ListPage extends StatelessWidget {
           final choreIndex = index ~/ 2;
           if (index.isEven) {
             if (choreIndex < filteredChores.length) {
-              return Column(
-                children: [
-                  ChoreItem(filteredChores[choreIndex]),
-                ],
-              );
+              return ChoreItem(filteredChores[choreIndex], choreIndex);
             }
           }
           return Divider(); // Display a Divider for odd indices

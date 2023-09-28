@@ -1,20 +1,56 @@
 import 'package:flutter/material.dart';
 import 'chore.dart';
+import 'api.dart';
 
 // handles all changes to the list with chores
 class ChoreList extends ChangeNotifier {
-  final List<Chore> _chores = [];
+  List<Chore> _chores = [];
 
   List<Chore> get chores => _chores;
 
-  // function/method that adds new chores
-  void addChore(Chore chore) {
-    _chores.add(chore);
+  // fetch chores and sorts them
+  Future<void> fetchChores() async {
+    var chores = await getChoresFromAPI();
+    _chores = chores;
+    sortChoresByDeadline(); //sorts the chores by deadline
+    notifyListeners();
+  }
+
+  // add chores to API
+  Future<void> addNewChore(Chore chore) async {
+    await addChoreToAPI(chore);
+    await fetchChores(); // retrieves new, sorted list with the newly added chore
+  }
+
+  // delete chores from API
+  void removeChore(Chore chore, int index) async {
+    var choreID = _chores[index].id;
+    await deleteChoreFromAPI(choreID!);
+    await fetchChores();
+  }
+
+  // update the chore text in API
+  void editChoreTitle(Chore chore, String newtext, int index) async {
+    var choreID = _chores[index].id; // identificates the chore ID
+    await updateChoreTextInAPI(choreID!, chore, newtext);
+    await fetchChores();
+  }
+
+  // update the chore deadline
+  void editChoreDeadline(Chore chore, int index) async {
+    var choreID = _chores[index].id; // identificates the chore ID
+    await updateAPIDeadline(choreID!, chore);
+    await fetchChores();
+  }
+
+  void changeChoreStatus(Chore chore, int index) async {
+    var choreID = _chores[index].id; // identificates the chore ID
+    await updateAPIStatus(choreID!, chore);
     notifyListeners();
   }
 
   // function that deletes chores from the list
-  void deleteChore(BuildContext context, Chore chore) {
+  void deleteChore(BuildContext context, Chore chore, int index) {
     // dialog box checks if user is sure about deleting
     showDialog(
       context: context,
@@ -31,7 +67,7 @@ class ChoreList extends ChangeNotifier {
             TextButton(
               child: Text('Delete'),
               onPressed: () {
-                _chores.remove(chore);
+                removeChore(chore, index);
                 notifyListeners();
                 Navigator.of(context).pop();
               },
@@ -43,9 +79,47 @@ class ChoreList extends ChangeNotifier {
   }
 
   // function that changes the chore`s icon when clicked
-  void toggleBox(Chore chore) {
+  void toggleBox(Chore chore, int index) {
     chore.isDone = !chore.isDone;
+    changeChoreStatus(chore, index);
     notifyListeners();
+  }
+
+// function for editing the chore text in existing chores
+  void editChoreText(BuildContext context, Chore chore, int index) {
+    TextEditingController textEditController =
+        TextEditingController(text: chore.text); //showing current chore text
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Edit chore text'),
+          content: TextField(
+            controller: textEditController,
+            decoration: InputDecoration(labelText: 'Chore Text'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Save'),
+              onPressed: () {
+                String newText = textEditController.text;
+                editChoreTitle(chore, newText, index);
+
+                notifyListeners();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   // function that converts the deadline parameters to DateTime format
@@ -86,85 +160,77 @@ class ChoreList extends ChangeNotifier {
 
   // function to sort the chores list according to deadlines
   void sortChoresByDeadline() {
-    chores.sort(compareChoresByDeadline);
+    _chores.sort(compareChoresByDeadline);
     notifyListeners();
   }
 
-// function to filter the chores that are done
-  List<Chore> filterDoneChores(List<Chore> chores) {
-    List<Chore> doneChores = [];
-    for (var c = 0; c < chores.length; c++) {
-      if (chores[c].isDone) {
-        doneChores.add(chores[c]);
-      }
-    }
-    return doneChores;
-  }
-
-// function to filter the undone chores
-  List<Chore> filterUndoneChores(List<Chore> chores) {
-    List<Chore> undoneChores = [];
-    for (var c = 0; c < chores.length; c++) {
-      if (!chores[c].isDone) {
-        undoneChores.add(chores[c]);
-      }
-    }
-    return undoneChores;
-  }
-
-// function for editing the chore text in existing chores
-  void editChoreText(BuildContext context, Chore chore, String newtxt) {
-    TextEditingController textEditController =
-        TextEditingController(text: chore.text); //showing current chore text
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Edit chore text'),
-          content: TextField(
-            controller: textEditController,
-            decoration: InputDecoration(labelText: 'Chore Text'),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Save'),
-              onPressed: () {
-                String newText = textEditController.text;
-                chore.text = newText;
-
-                notifyListeners();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
 // function for editing the deadline in existing chores
-  void editChoreDeadline(BuildContext context, Chore chore, String year) {
-    TextEditingController deadlineEditController =
-        //showing current deadline
-        TextEditingController(
-            text:
-                '${chore.year}/${chore.month}/${chore.day}    ${chore.hour}:${chore.minute}');
+  void editChoreDeadlineDialog(BuildContext context, Chore chore, int index) {
+    TextEditingController dateController = TextEditingController(
+        text: '${chore.day}/${chore.month}/${chore.year}'); // current date
+    TextEditingController timeController = TextEditingController(
+        text: '${chore.hour}:${chore.minute}'); // current time
+
+    // function to show date picker
+    Future<void> selectDate() async {
+      final selectedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime.now(),
+        lastDate: DateTime(DateTime.now().year + 5),
+      );
+      if (selectedDate != null) {
+        dateController.text =
+            '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}';
+      }
+    }
+
+    // function to show time picker with current time
+    Future<void> selectTime() async {
+      final selectedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay(
+          hour: int.parse(chore.hour),
+          minute: int.parse(chore.minute),
+        ),
+      );
+      if (selectedTime != null) {
+        timeController.text =
+            '${selectedTime.hour.toString().padLeft(2, '0')}:${selectedTime.minute.toString().padLeft(2, '0')}';
+      }
+    }
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Edit chore deadline'),
-          content: TextField(
-            controller: deadlineEditController,
-            decoration:
-                InputDecoration(labelText: 'Format YYYY/MM/DD    HH:MM'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              InkWell(
+                onTap: () => selectDate(),
+                child: IgnorePointer(
+                  child: TextField(
+                    controller: dateController,
+                    decoration: InputDecoration(
+                      labelText: 'Select Date',
+                    ),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () => selectTime(),
+                child: IgnorePointer(
+                  child: TextField(
+                    controller: timeController,
+                    decoration: InputDecoration(
+                      labelText: 'Select Time',
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
           actions: <Widget>[
             TextButton(
@@ -176,16 +242,16 @@ class ChoreList extends ChangeNotifier {
             TextButton(
               child: Text('Save'),
               onPressed: () {
-                // saving new parameters as substrings of input
-                String newYear = deadlineEditController.text.substring(0, 4);
-                String newMonth = deadlineEditController.text.substring(5, 7);
-                String newDay = deadlineEditController.text.substring(8, 10);
-                String newHour = deadlineEditController.text.substring(
-                    deadlineEditController.text.length - 5,
-                    deadlineEditController.text.length - 3);
-                String newMinute = deadlineEditController.text.substring(
-                    deadlineEditController.text.length - 2,
-                    deadlineEditController.text.length);
+                // retrieving date and time parameters from the text controllers
+                final dateParts = dateController.text.split('/');
+                final timeParts = timeController.text.split(':');
+
+                String newDay = dateParts[0];
+                String newMonth = dateParts[1];
+                String newYear = dateParts[2];
+
+                String newHour = timeParts[0];
+                String newMinute = timeParts[1];
 
                 // updates chore parameters
                 chore.year = newYear;
@@ -194,6 +260,7 @@ class ChoreList extends ChangeNotifier {
                 chore.hour = newHour;
                 chore.minute = newMinute;
 
+                editChoreDeadline(chore, index);
                 notifyListeners();
                 Navigator.of(context).pop();
               },
@@ -202,12 +269,13 @@ class ChoreList extends ChangeNotifier {
               child: Text(
                   'No deadline'), // will empty the strings, builds the chore item with 'No deadline'
               onPressed: () {
-                chore.year = '';
-                chore.month = '';
-                chore.day = '';
-                chore.hour = '';
-                chore.minute = '';
+                chore.year = '0000';
+                chore.month = '00';
+                chore.day = '00';
+                chore.hour = '00';
+                chore.minute = '00';
 
+                editChoreDeadline(chore, index);
                 notifyListeners();
                 Navigator.of(context).pop();
               },
