@@ -17,4 +17,22 @@ class DateTimeProvider extends ChangeNotifier {
     );
     notifyListeners();
   }
+
+  // updates the selected time
+  Future<void> updateSelectedTime(TimeOfDay selectedTime) async {
+    _selectedDateTime = DateTime(
+        _selectedDateTime.year,
+        _selectedDateTime.month,
+        _selectedDateTime.day,
+        selectedTime.hour,
+        selectedTime.minute);
+    notifyListeners();
+  }
+
+  // updates the selected date
+  Future<void> updateSelectedDate(DateTime selectedDate) async {
+    _selectedDateTime = DateTime(selectedDate.year, selectedDate.month,
+        selectedDate.day, _selectedDateTime.hour, _selectedDateTime.minute);
+    notifyListeners();
+  }
 }

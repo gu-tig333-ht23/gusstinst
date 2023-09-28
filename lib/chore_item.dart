@@ -67,6 +67,8 @@ class ChoreItem extends StatelessWidget {
                 },
                 child: Text(
                   style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
                       decoration: chore.isDone
                           ? TextDecoration.lineThrough
                           : TextDecoration.none),
@@ -97,6 +99,7 @@ class ChoreItem extends StatelessWidget {
                           ? 'No deadline'
                           : '${chore.day}/${chore.month}/${chore.year}    ${chore.hour}:${chore.minute}',
                       style: TextStyle(
+                          fontSize: 14,
                           color: getColorForChoreStatus(chore) ==
                                   const Color.fromARGB(255, 79, 8, 3)
                               ? Colors.white

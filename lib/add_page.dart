@@ -7,7 +7,6 @@ import 'date_time_provider.dart';
 import 'package:intl/intl.dart';
 
 // View for adding new chores
-// ignore: must_be_immutable
 class AddPage extends StatelessWidget {
   // controllers for saving text input when adding new chores
   final TextEditingController _textController = TextEditingController();
@@ -20,6 +19,33 @@ class AddPage extends StatelessWidget {
       child: Builder(builder: (context) {
         final dateTimeProvider = Provider.of<DateTimeProvider>(context);
 
+        // function to show date picker
+        Future<void> createDate() async {
+          final selectedDate = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime.now(),
+            lastDate: DateTime(DateTime.now().year + 5),
+          );
+          if (selectedDate != null) {
+            dateTimeProvider.updateSelectedDate(selectedDate);
+          }
+        }
+
+        // function to show time picker
+        Future<void> createTime() async {
+          final selectedTime = await showTimePicker(
+            context: context,
+            initialTime: TimeOfDay(
+              hour: TimeOfDay.now().hour + 2,
+              minute: TimeOfDay.now().minute,
+            ),
+          );
+          if (selectedTime != null) {
+            dateTimeProvider.updateSelectedTime(selectedTime);
+          }
+        }
+
         return Column(
           children: [
             Padding(
@@ -30,10 +56,12 @@ class AddPage extends StatelessWidget {
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.all(10),
                   labelText: 'What are you going to do?',
+                  labelStyle: TextStyle(color: Colors.black, fontSize: 20),
                 ),
               ),
             ),
-            Text('Any deadline? (optional)'),
+            Text('Any deadline? (optional)',
+                style: TextStyle(color: Colors.black, fontSize: 16)),
             SizedBox(height: 10),
             // Year, month and day input fields in a row
             Padding(
@@ -42,57 +70,30 @@ class AddPage extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () async {
-                        final selectedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime(DateTime.now().year + 5),
-                        );
-                        if (selectedDate != null) {
-                          final selectedTime = await showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay(
-                              hour: TimeOfDay.now().hour + 2,
-                              minute: TimeOfDay.now().minute,
-                            ),
-                          );
-                          if (selectedTime != null) {
-                            dateTimeProvider.updateSelectedDateTime(
-                                selectedDate, selectedTime);
-                          }
-                        }
+                      onPressed: () {
+                        createDate();
                       },
-                      child: Text('Select Date'),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).colorScheme.inversePrimary),
+                      ),
+                      child: Text('Select Date',
+                          style: TextStyle(color: Colors.black, fontSize: 16)),
                     ),
                   ),
 
                   SizedBox(width: 5), // add some space between input fields
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () async {
-                        final selectedTime = await showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay(
-                              hour: TimeOfDay.now().hour + 2,
-                              minute: TimeOfDay.now().minute,
-                            ));
-                        if (selectedTime != null) {
-                          final selectedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime.now(),
-                            lastDate: DateTime(DateTime.now().year + 5),
-                          );
-                          if (selectedDate != null) {
-                            dateTimeProvider.updateSelectedDateTime(
-                              selectedDate,
-                              selectedTime,
-                            );
-                          }
-                        }
+                      onPressed: () {
+                        createTime();
                       },
-                      child: Text('Select Time'),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).colorScheme.inversePrimary),
+                      ),
+                      child: Text('Select Time',
+                          style: TextStyle(color: Colors.black, fontSize: 16)),
                     ),
                   ),
                 ],
@@ -103,25 +104,37 @@ class AddPage extends StatelessWidget {
               builder: (context, selectedDateTime, child) {
                 return Column(
                   children: [
-                    Text(
-                        'Selected Date and Time: ${dateTimeProvider.selectedDateTime == DateTime(0000, 00, 00, 00, 00) ? "No deadline" : DateFormat.yMd().add_Hm().format(dateTimeProvider.selectedDateTime)}'),
                     ElevatedButton(
                       onPressed: () {
                         dateTimeProvider.updateSelectedDateTime(
                             DateTime(0000, 00, 00, 00, 00),
                             TimeOfDay(hour: 00, minute: 00));
                       },
-                      child: Text('Reset deadline'),
-                    )
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            Theme.of(context).colorScheme.inversePrimary),
+                      ),
+                      child: Text('Reset deadline',
+                          style: TextStyle(color: Colors.black, fontSize: 14)),
+                    ),
+                    Text(
+                      'Selected Date and Time:',
+                      style: TextStyle(color: Colors.black, fontSize: 14),
+                    ),
+                    Text(
+                        ' ${dateTimeProvider.selectedDateTime == DateTime(0000, 00, 00, 00, 00) ? "No deadline" : DateFormat.yMd().add_Hm().format(dateTimeProvider.selectedDateTime)}',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold)),
                   ],
                 );
               },
             ),
 
-            SizedBox(height: 10),
+            SizedBox(height: 15),
             FloatingActionButton.extended(
               icon: Icon(Icons.add),
-              label: Text('ADD'),
+              label: Text('ADD',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               onPressed: () {
                 // Gets the entered chore text from the input field
                 String choreText = _textController.text;
@@ -154,67 +167,6 @@ class AddPage extends StatelessWidget {
                 // Back to "main page" after adding a chore
                 Provider.of<MyAppState>(context, listen: false).setIndex(0);
               },
-            ),
-            SizedBox(height: 10),
-
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text('What does the deadline colors mean?'),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top: 8.0, bottom: 2, left: 8, right: 8),
-                  child: Container(
-                    alignment: Alignment.topLeft,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.green),
-                    padding: EdgeInsets.all(4),
-                    child: Text(
-                        'Chill                          >2 days left/No deadline'),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 2, left: 8, right: 8.0),
-                  child: Container(
-                    alignment: Alignment.topLeft,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.yellow),
-                    padding: EdgeInsets.all(4),
-                    child: Text(
-                        'Move on                                         <2 days left'),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 2, left: 8, right: 8.0),
-                  child: Container(
-                    alignment: Alignment.topLeft,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.orange),
-                    padding: EdgeInsets.all(4),
-                    child: Text(
-                        'Hurry                                            <4 hours left'),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 2, left: 8, right: 8.0),
-                  child: Container(
-                    alignment: Alignment.topLeft,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: const Color.fromARGB(255, 79, 8, 3)),
-                    padding: EdgeInsets.all(4),
-                    child: Text(
-                        'Late                                        deadline passed',
-                        style: TextStyle(color: Colors.white)),
-                  ),
-                ),
-              ],
             ),
           ],
         );
