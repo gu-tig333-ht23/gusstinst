@@ -8,7 +8,7 @@ class ChoreList extends ChangeNotifier {
 
   List<Chore> get chores => _chores;
 
-  // fetch chores from API and sorts them
+  // fetch chores and sorts them
   Future<void> fetchChores() async {
     var chores = await getChoresFromAPI();
     _chores = chores;
@@ -185,7 +185,7 @@ class ChoreList extends ChangeNotifier {
       }
     }
 
-    // function to show time picker
+    // function to show time picker with current time
     Future<void> selectTime() async {
       final selectedTime = await showTimePicker(
         context: context,
