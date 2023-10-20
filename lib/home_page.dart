@@ -93,81 +93,7 @@ class MyHomePage extends StatelessWidget {
                     tooltip: 'Color legend',
                     onPressed: () {
                       // pop up window with color legend
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('What does the colors mean?',
-                                style: TextStyle(fontSize: 20)),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 8.0, bottom: 2, left: 8, right: 8),
-                                  child: Container(
-                                    alignment: Alignment.topLeft,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: Colors.green),
-                                    padding: EdgeInsets.all(4),
-                                    child: Text(
-                                        'Chill          >2 days left/No deadline',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16)),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 2, left: 8, right: 8.0),
-                                  child: Container(
-                                    alignment: Alignment.topLeft,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: Colors.yellow),
-                                    padding: EdgeInsets.all(4),
-                                    child: Text(
-                                        'Move on                         <2 days left',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16)),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 2, left: 8, right: 8.0),
-                                  child: Container(
-                                    alignment: Alignment.topLeft,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: Colors.orange),
-                                    padding: EdgeInsets.all(4),
-                                    child: Text(
-                                        'Hurry                             <4 hours left',
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 16)),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 2, left: 8, right: 8.0),
-                                  child: Container(
-                                    alignment: Alignment.topLeft,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: const Color.fromARGB(
-                                            255, 79, 8, 3)),
-                                    padding: EdgeInsets.all(4),
-                                    child: Text(
-                                        'Late                        deadline passed',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 16)),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
+                      showColorLegend(context);
                     },
                   ),
                   destinations: [
@@ -213,4 +139,70 @@ class MyHomePage extends StatelessWidget {
       );
     });
   }
+}
+
+void showColorLegend(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title:
+            Text('What does the colors mean?', style: TextStyle(fontSize: 20)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.only(top: 8.0, bottom: 2, left: 8, right: 8),
+              child: Container(
+                alignment: Alignment.topLeft,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.green),
+                padding: EdgeInsets.all(4),
+                child: Text('Chill          >2 days left/No deadline',
+                    style: TextStyle(color: Colors.black, fontSize: 16)),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 2, left: 8, right: 8.0),
+              child: Container(
+                alignment: Alignment.topLeft,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.yellow),
+                padding: EdgeInsets.all(4),
+                child: Text('Move on                         <2 days left',
+                    style: TextStyle(color: Colors.black, fontSize: 16)),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 2, left: 8, right: 8.0),
+              child: Container(
+                alignment: Alignment.topLeft,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.orange),
+                padding: EdgeInsets.all(4),
+                child: Text('Hurry                             <4 hours left',
+                    style: TextStyle(color: Colors.black, fontSize: 16)),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 2, left: 8, right: 8.0),
+              child: Container(
+                alignment: Alignment.topLeft,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: const Color.fromARGB(255, 79, 8, 3)),
+                padding: EdgeInsets.all(4),
+                child: Text('Late                        deadline passed',
+                    style: TextStyle(color: Colors.white, fontSize: 16)),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
 }
