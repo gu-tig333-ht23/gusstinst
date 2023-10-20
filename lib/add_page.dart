@@ -135,7 +135,7 @@ class AddPage extends StatelessWidget {
               icon: Icon(Icons.add),
               label: Text('ADD',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              onPressed: () {
+              onPressed: () async {
                 // Gets the entered chore text from the input field
                 String choreText = _textController.text;
                 DateTime selectedDateTime = dateTimeProvider.selectedDateTime;
@@ -158,9 +158,14 @@ class AddPage extends StatelessWidget {
                     minute: selectedDateTime.minute.toString().padLeft(2, '0'),
                   );
 
-                  // Adds chore to the chores list
-                  Provider.of<ChoreList>(context, listen: false)
-                      .addNewChore(newChore);
+                  bool apiresponse = await
+                      // Adds chore to the chores list
+                      Provider.of<ChoreList>(context, listen: false)
+                          .addNewChore(newChore);
+                  if (apiresponse) {
+                    await Provider.of<ChoreList>(context, listen: false)
+                        .fetchChores();
+                  }
                 }
                 // Clears the input fields
                 _textController.clear();

@@ -17,36 +17,31 @@ class ChoreList extends ChangeNotifier {
   }
 
   // add chores to API
-  Future<void> addNewChore(Chore chore) async {
-    await addChoreToAPI(chore);
-    await fetchChores(); // retrieves new, sorted list with the newly added chore
+  Future<bool> addNewChore(Chore chore) async {
+    return await addChoreToAPI(chore);
   }
 
   // delete chores from API
-  void removeChore(Chore chore, int index) async {
+  Future<bool> removeChore(Chore chore, int index) async {
     var choreID = _chores[index].id;
-    await deleteChoreFromAPI(choreID!);
-    await fetchChores();
+    return await deleteChoreFromAPI(choreID!);
   }
 
   // update the chore text in API
-  void editChoreTitle(Chore chore, String newtext, int index) async {
+  Future<bool> editChoreTitle(Chore chore, String newtext, int index) async {
     var choreID = _chores[index].id; // identificates the chore ID
-    await updateChoreTextInAPI(choreID!, chore, newtext);
-    await fetchChores();
+    return await updateAPIChore(choreID!, chore, newText: newtext);
   }
 
   // update the chore deadline
-  void editChoreDeadline(Chore chore, int index) async {
+  Future<bool> editChoreDeadline(Chore chore, int index) async {
     var choreID = _chores[index].id; // identificates the chore ID
-    await updateAPIDeadline(choreID!, chore);
-    await fetchChores();
+    return await updateAPIChore(choreID!, chore);
   }
 
-  void changeChoreStatus(Chore chore, int index) async {
+  Future<bool> changeChoreStatus(Chore chore, int index) async {
     var choreID = _chores[index].id; // identificates the chore ID
-    await updateAPIStatus(choreID!, chore);
-    notifyListeners();
+    return await updateAPIStatus(choreID!, chore);
   }
 
   // function that deletes chores from the list
@@ -66,10 +61,15 @@ class ChoreList extends ChangeNotifier {
             ),
             TextButton(
               child: Text('Delete'),
-              onPressed: () {
-                removeChore(chore, index);
-                notifyListeners();
-                Navigator.of(context).pop();
+              onPressed: () async {
+                bool apiresponse = await removeChore(chore, index);
+                if (apiresponse) {
+                  notifyListeners();
+                  await fetchChores();
+                  Navigator.of(context).pop();
+                } else {
+                  print('API call failed');
+                }
               },
             ),
           ],
@@ -78,11 +78,16 @@ class ChoreList extends ChangeNotifier {
     );
   }
 
-  // function that changes the chore`s icon when clicked
-  void toggleBox(Chore chore, int index) {
-    chore.isDone = !chore.isDone;
-    changeChoreStatus(chore, index);
-    notifyListeners();
+  // function that changes the chore`s icon when clicked, if API call is successful
+  void toggleBox(Chore chore, int index) async {
+    bool apiResponse = await changeChoreStatus(chore, index);
+    if (apiResponse) {
+      // API call successful/returns true
+      chore.isDone = !chore.isDone;
+      notifyListeners();
+    } else {
+      print('API call failed');
+    }
   }
 
 // function for editing the chore text in existing chores
@@ -108,12 +113,17 @@ class ChoreList extends ChangeNotifier {
             ),
             TextButton(
               child: Text('Save'),
-              onPressed: () {
+              onPressed: () async {
                 String newText = textEditController.text;
-                editChoreTitle(chore, newText, index);
-
-                notifyListeners();
-                Navigator.of(context).pop();
+                bool apiresponse = await editChoreTitle(chore, newText, index);
+                if (apiresponse) {
+                  // Successful API call returns true
+                  notifyListeners();
+                  await fetchChores(); // retrieves new, sorted list with the newly added chore
+                  Navigator.of(context).pop();
+                } else {
+                  print('API call failed');
+                }
               },
             ),
           ],
@@ -241,7 +251,7 @@ class ChoreList extends ChangeNotifier {
             ),
             TextButton(
               child: Text('Save'),
-              onPressed: () {
+              onPressed: () async {
                 // retrieving date and time parameters from the text controllers
                 final dateParts = dateController.text.split('/');
                 final timeParts = timeController.text.split(':');
@@ -260,24 +270,35 @@ class ChoreList extends ChangeNotifier {
                 chore.hour = newHour;
                 chore.minute = newMinute;
 
-                editChoreDeadline(chore, index);
-                notifyListeners();
-                Navigator.of(context).pop();
+                bool apiresponse = await editChoreDeadline(chore, index);
+                if (apiresponse) {
+                  // Successful API call
+                  notifyListeners();
+                  await fetchChores(); // retrieves new, sorted list with the newly added chore
+                  Navigator.of(context).pop();
+                } else {
+                  print('API call failed');
+                }
               },
             ),
             TextButton(
               child: Text(
                   'No deadline'), // will empty the strings, builds the chore item with 'No deadline'
-              onPressed: () {
+              onPressed: () async {
                 chore.year = '0000';
                 chore.month = '00';
                 chore.day = '00';
                 chore.hour = '00';
                 chore.minute = '00';
 
-                editChoreDeadline(chore, index);
-                notifyListeners();
-                Navigator.of(context).pop();
+                bool apiresponse = await editChoreDeadline(chore, index);
+                if (apiresponse) {
+                  notifyListeners();
+                  await fetchChores();
+                  Navigator.of(context).pop();
+                } else {
+                  print('API call failed');
+                }
               },
             ),
           ],

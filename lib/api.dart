@@ -7,7 +7,7 @@ import 'dart:convert';
 // Endpoint
 const String api = 'https://todoapp-api.apps.k8s.gu.se';
 // API Key
-const String apiKey = '8a68cedb-e3f7-42c7-a0b0-a9547d962017';
+const String apiKey = 'e88119ce-f54f-457c-bcb2-07bc332b2c45';
 
 Future<List<Chore>> getChoresFromAPI() async {
   http.Response response = await http.get(Uri.parse('$api/todos?key=$apiKey'));
@@ -19,57 +19,74 @@ Future<List<Chore>> getChoresFromAPI() async {
 }
 
 // add new chore to API
-Future<void> addChoreToAPI(Chore chore) async {
-  await http.post(
-    Uri.parse('$api/todos?key=$apiKey'),
-    headers: {"Content-Type": "application/json"},
-    body: jsonEncode(chore.toJson()),
-  );
+Future<bool> addChoreToAPI(Chore chore) async {
+  try {
+    final response = await http.post(
+      Uri.parse('$api/todos?key=$apiKey'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(chore.toJson()),
+    );
+
+    if (response.statusCode == 200) {
+      // API call is successful
+      return true;
+    } else {
+      // API call failed
+      return false;
+    }
+  } catch (error) {
+    print('Network error: $error');
+    return false;
+  }
 }
 
 // delete a chore from API by ID
-Future<void> deleteChoreFromAPI(String id) async {
-  await http.delete(Uri.parse('$api/todos/$id?key=$apiKey'));
-}
+Future<bool> deleteChoreFromAPI(String id) async {
+  try {
+    final response = await http.delete(Uri.parse('$api/todos/$id?key=$apiKey'));
 
-// update the chore text in API
-Future<void> updateChoreTextInAPI(
-    String id, Chore chore, String newText) async {
-  bool status = chore.isDone; // retrieving current chore parameters
-  String y = chore.year;
-  String mo = chore.month;
-  String d = chore.day;
-  String h = chore.hour;
-  String m = chore.minute;
-
-  Chore editedChore = Chore(newText,
-      year: y,
-      month: mo,
-      day: d,
-      hour: h,
-      minute: m,
-      isDone:
-          status); // creates a new chore with the changed text and same status and other parameters stays the same
-  await http.put(Uri.parse('$api/todos/$id?key=$apiKey'),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode(editedChore
-          .toJson())); // put the new chore in, replacing the old one with same ID
+    if (response.statusCode == 200) {
+      // successful API call
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    // if network fails
+    print('Network error: $error');
+    return false;
+  }
 }
 
 // update chore status in API
-Future<void> updateAPIStatus(String id, Chore chore) async {
-  bool status = chore
-      .isDone; // retrieves the chores actual status true/false after toggling
+Future<bool> updateAPIStatus(String id, Chore chore) async {
+  bool status = !chore
+      .isDone; // retrieves the chores actual status true/false AFTER toggling according to its current status
   Chore updatedChore = Chore(chore.text, isDone: status);
-  await http.put(Uri.parse('$api/todos/$id?key=$apiKey'),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode(updatedChore
-          .toJson())); // put the new chore in, replacing the old one with same ID
+  try {
+    final response = await http.put(Uri.parse('$api/todos/$id?key=$apiKey'),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(updatedChore
+            .toJson())); // put the new chore in, replacing the old one with same ID
+
+    if (response.statusCode == 200) {
+      // API call is successful
+      return true;
+    } else {
+      // API call failed
+      return false;
+    }
+  } catch (error) {
+    // if the network fails
+    print('Network error: $error');
+    return false;
+  }
 }
 
-// update chore deadline in API
-Future<void> updateAPIDeadline(String id, Chore chore) async {
-  String text = chore.text;
+// update chore deadline and/or text in API
+Future<bool> updateAPIChore(String id, Chore chore, {String? newText}) async {
+  String text = newText ??
+      chore.text; // if no new choretext is provided, keep the current
   bool status = chore.isDone; // retrieving current chore parameters
   String m = chore.minute;
   String h = chore.hour;
@@ -77,16 +94,29 @@ Future<void> updateAPIDeadline(String id, Chore chore) async {
   String mo = chore.month;
   String y = chore.year;
 
+  if (newText != null) {
+    text = newText;
+  }
+
   Chore editedDeadlineChore = Chore(text,
-      minute: m,
-      hour: h,
-      day: d,
-      month: mo,
-      year: y,
-      isDone:
-          status); // creates a new chore with the changed deadline and the other parameters stays the same
-  await http.put(Uri.parse('$api/todos/$id?key=$apiKey'),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode(editedDeadlineChore
-          .toJson())); // put the new chore in, replacing the old one with same ID
+      minute: m, hour: h, day: d, month: mo, year: y, isDone: status);
+
+  try {
+    // creates a new chore with the changed deadline and the other parameters stays the same
+    final response = await http.put(Uri.parse('$api/todos/$id?key=$apiKey'),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(editedDeadlineChore
+            .toJson())); // put the new chore in, replacing the old one with same ID
+    if (response.statusCode == 200) {
+      // API call is successful
+      return true;
+    } else {
+      // API call failed
+      return false;
+    }
+  } catch (error) {
+    // if network fails
+    print('Network error: $error');
+    return false;
+  }
 }
